@@ -1,9 +1,10 @@
 import {Component, Inject, OnInit, ViewChild} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
+import {map} from 'rxjs/operators';
+
 import {AddPatientComponent, FacadePatientService} from '../../../../shared';
 import {Observable, of} from 'rxjs';
 import {Patient} from '../../../../shared/models';
-import {map} from 'rxjs/operators';
 
 @Component({
   selector: 'patient-app-show-patient',

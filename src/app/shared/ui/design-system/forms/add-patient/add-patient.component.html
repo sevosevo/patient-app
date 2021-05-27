@@ -4,16 +4,19 @@
     [label]="FIRST_NAME_LABEL"
     [formControlName]="firstNameControlName">
   </patient-app-text-input>
+  <br>
   <patient-app-text-input
     [errorToMessageMap]="lastNameErrorMessageMap"
     [label]="LAST_NAME_LABEL"
     [formControlName]="lastNameControlName">
   </patient-app-text-input>
-  <!--- @todo: ADD BIRTHDAY CONTROL HERE --->
+  <br>
+  <patient-app-date-picker></patient-app-date-picker>
   <patient-app-text-input
     [label]="VAT_CODE_LABEL"
     [formControlName]="VATCodeControlName">
   </patient-app-text-input>
+  <br>
   <patient-app-text-input
     [errorToMessageMap]="emailErrorMessageMap"
     [label]="EMAIL_LABEL"

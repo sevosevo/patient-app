@@ -1,9 +1,9 @@
 import {NgModule} from '@angular/core';
 import {MaterialModule} from '../material';
-import {CardComponent, TableComponent} from './components';
-import {TextInputComponent} from './controls';
 import {CommonModule} from '@angular/common';
 import {ReactiveFormsModule} from '@angular/forms';
+import {TextInputComponent, DatePickerComponent} from './controls';
+import {CardComponent, TableComponent} from './components';
 import {AddPatientComponent} from './forms';
 
 const declarations = [
@@ -15,7 +15,7 @@ const declarations = [
 
 @NgModule({
   imports: [MaterialModule, CommonModule, ReactiveFormsModule],
-  declarations: [...declarations],
+  declarations: [...declarations, DatePickerComponent],
   exports: [MaterialModule, ...declarations],
 })
 export class DesignSystemModule {}
