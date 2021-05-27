@@ -6,6 +6,6 @@
     <ng-content></ng-content>
   </mat-card-content>
   <mat-card-actions *ngIf="showSaveButton">
-    <button [disabled]="saveButtonDisabled" mat-button>{{ saveButtonLabel }}</button>
+    <button (click)="saveButtonClicked.next()" [disabled]="saveButtonDisabled" mat-button>{{ saveButtonLabel }}</button>
   </mat-card-actions>
 </mat-card>

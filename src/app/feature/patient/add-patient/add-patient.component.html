@@ -1,4 +1,8 @@
-<patient-app-card [title]="ADD_PATIENT_FORM_TITLE">
-  <form [formGroup]="patientFormGroup">
-  </form>
+<patient-app-card
+  [title]="ADD_PATIENT_FORM_TITLE"
+  [saveButtonDisabled]="!addPatientFormComponent.patientFormGroup.valid"
+  (saveButtonClicked)="addPatient()"
+>
+  <patient-app-add-patient-form>
+  </patient-app-add-patient-form>
 </patient-app-card>

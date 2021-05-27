@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 
 @Component({
   selector: 'patient-app-card',
@@ -12,5 +12,6 @@ export class CardComponent {
   @Input() showSaveButton = true;
   @Input() saveButtonDisabled = false;
   @Input() saveButtonLabel = 'Save';
+  @Output() saveButtonClicked = new EventEmitter<void>();
 
 }

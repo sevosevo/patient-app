@@ -1,0 +1,22 @@
+<form [formGroup]="patientFormGroup">
+  <patient-app-text-input
+    [errorToMessageMap]="firstNameErrorMessageMap"
+    [label]="FIRST_NAME_LABEL"
+    [formControlName]="firstNameControlName">
+  </patient-app-text-input>
+  <patient-app-text-input
+    [errorToMessageMap]="lastNameErrorMessageMap"
+    [label]="LAST_NAME_LABEL"
+    [formControlName]="lastNameControlName">
+  </patient-app-text-input>
+  <!--- @todo: ADD BIRTHDAY CONTROL HERE --->
+  <patient-app-text-input
+    [label]="VAT_CODE_LABEL"
+    [formControlName]="VATCodeControlName">
+  </patient-app-text-input>
+  <patient-app-text-input
+    [errorToMessageMap]="emailErrorMessageMap"
+    [label]="EMAIL_LABEL"
+    [formControlName]="emailControlName">
+  </patient-app-text-input>
+</form>

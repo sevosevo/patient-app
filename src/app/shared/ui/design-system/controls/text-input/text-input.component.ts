@@ -1,39 +1,34 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, Optional, Self} from '@angular/core';
 import {
   ControlValueAccessor,
-  FormControl,
-  NG_VALIDATORS,
-  NG_VALUE_ACCESSOR,
-  ValidatorFn,
+  FormControl, FormGroupDirective,
+  NgControl,
+  NgForm,
 } from '@angular/forms';
+import {ErrorStateMatcher} from '@angular/material';
 
 @Component({
   selector: 'patient-app-text-input',
   templateUrl: './text-input.component.html',
   styleUrls: ['./text-input.component.css'],
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: TextInputComponent,
-      multi: true,
-    },
-    {
-      provide: NG_VALIDATORS,
-      useExisting: TextInputComponent,
-      multi: true,
-    },
-  ],
 })
-export class TextInputComponent implements ControlValueAccessor, OnInit {
+export class TextInputComponent implements ControlValueAccessor, OnInit, ErrorStateMatcher {
 
   @Input() label: string;
   @Input() placeholder: string;
-  @Input() validators: ValidatorFn[] = [];
+
+  @Input()
+  errorToMessageMap: Record<string, string> = {};
 
   inputControl: FormControl = new FormControl(null);
 
+  constructor(@Optional() @Self() public ngControl: NgControl) {
+    if (this.ngControl) {
+      this.ngControl.valueAccessor = this;
+    }
+  }
+
   ngOnInit() {
-    this.initializeValidation();
   }
 
   registerOnChange(fn: (change) => void): void {
@@ -54,7 +49,16 @@ export class TextInputComponent implements ControlValueAccessor, OnInit {
     this.inputControl.setValue(val);
   }
 
-  initializeValidation() {
-    this.inputControl.setValidators(this.validators);
+  isErrorState(
+    control: FormControl | null,
+    form: FormGroupDirective | NgForm | null
+  ): boolean {
+    return (
+      !!(control && control.invalid && (control.dirty || control.touched)) ||
+      (this.ngControl &&
+        this.ngControl.invalid &&
+        (this.ngControl.dirty || this.ngControl.touched))
+    );
   }
+
 }

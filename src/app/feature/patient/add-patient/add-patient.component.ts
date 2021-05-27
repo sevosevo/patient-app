@@ -1,5 +1,8 @@
-import {Component, OnInit} from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import axios from 'axios';
+
+import {AddPatientComponent as AddPatientFormComponent} from '../../../shared';
+import {Patient} from '../../../shared/models';
 
 @Component({
   selector: 'patient-app-add-patient',
@@ -8,18 +11,25 @@ import {FormControl, FormGroup, Validators} from '@angular/forms';
 })
 export class AddPatientComponent implements OnInit {
 
-  ADD_PATIENT_FORM_TITLE = 'Add patient';
+  @ViewChild(AddPatientFormComponent, { static: true }) addPatientFormComponent: AddPatientFormComponent;
 
-  patientFormGroup = new FormGroup({
-    firstName: new FormControl('', Validators.required),
-    lastName: new FormControl('', Validators.required),
-    birthDate: new FormControl(null, Validators.required),
-    email: new FormControl('', Validators.required),
-  });
+  readonly ADD_PATIENT_FORM_TITLE = 'Add patient';
 
   constructor() { }
 
-  ngOnInit() {
+  ngOnInit() {}
+
+  createNewPatient(): Patient {
+    const formData = this.addPatientFormComponent.patientFormGroup.value;
+    return {
+      // @todo: map appropriate fields
+      ...formData
+    };
+  }
+
+  addPatient() {
+    const patient = this.createNewPatient();
+    // axios.post('...')
   }
 
 }
