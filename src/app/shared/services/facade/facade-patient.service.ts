@@ -1,6 +1,8 @@
 import {Injectable} from '@angular/core';
 import {ApiPatientService} from '../api';
 import {StatePatientService} from '../state';
+import {Patient} from '../../models';
+import {first} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -23,6 +25,12 @@ export class FacadePatientService {
   getPatients(): void {
     this.apiPatientService.getPatients()
       .subscribe(patients => this.statePatientService.setPatients(patients));
+  }
+
+  addPatient(patient: Patient): void {
+    this.statePatientService.patients$.pipe(first()).subscribe(patients => {
+      this.statePatientService.setPatients([...patients, patient]);
+    });
   }
 
 }

@@ -105,6 +105,9 @@ export class AddPatientComponent implements OnInit {
 
   toggleVatControlBasedOnAge() {
     this.birthDateControl.valueChanges.subscribe(date => {
+      if (!(date instanceof Date)) {
+        return;
+      }
       if (GetTimeUtility.calculateAge(date) > 18) {
         this.VATControl.setValidators(Validators.required);
       } else {
@@ -121,6 +124,7 @@ export class AddPatientComponent implements OnInit {
     this.emailControl.setValue(this.prefillForm.email);
     this.birthDateControl.setValue(this.prefillForm.birthDate);
     this.VATControl.setValue(this.prefillForm.VATCode);
+    this.doctorControl.setValue(this.prefillForm.doctor);
   }
 
 }

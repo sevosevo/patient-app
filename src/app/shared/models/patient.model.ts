@@ -1,3 +1,5 @@
+import {Doctor} from './doctor.model';
+
 export enum AddressType {
   HOME = 'HOME',
   WORK = 'WORK',
@@ -24,7 +26,7 @@ export interface Patient {
   registeredDate: Date;
   VATCode: string;
   email: string;
-  doctor: number | any;
+  doctor: string | number | Doctor;
   addresses: Address[];
 }
 

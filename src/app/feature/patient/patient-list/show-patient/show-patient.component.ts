@@ -1,10 +1,10 @@
 import {Component, Inject, OnInit, ViewChild} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
-import {map} from 'rxjs/operators';
+import {first, map, withLatestFrom} from 'rxjs/operators';
 
 import {AddPatientComponent, FacadePatientService} from '../../../../shared';
 import {Observable, of} from 'rxjs';
-import {Patient} from '../../../../shared/models';
+import {Doctor, Patient} from '../../../../shared/models';
 
 @Component({
   selector: 'patient-app-show-patient',
@@ -20,6 +20,7 @@ export class ShowPatientComponent implements OnInit {
   readonly showBackButton = true;
 
   patient$: Observable<Patient> = of(null);
+  doctors$: Observable<Doctor[]> = this.facadePatientService.doctors$;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public patientId: number,
@@ -29,7 +30,17 @@ export class ShowPatientComponent implements OnInit {
 
   ngOnInit() {
     this.patient$ = this.facadePatientService.patients$
-      .pipe(map(patients => patients.find(patient => patient.id === this.patientId)));
+      .pipe(
+        first(),
+        map(patients => patients.find(patient => patient.id === this.patientId)),
+        withLatestFrom(this.doctors$),
+        map(([patient, doctors]) => {
+          const patientCopy = { ...patient };
+          const chosenDoctor = doctors.find(doctor => doctor.id === patient.doctor);
+          patientCopy.doctor = chosenDoctor.firstName + ' ' + chosenDoctor.lastName;
+          return patientCopy;
+        }),
+      );
 
     this.disableAllFormFields();
   }

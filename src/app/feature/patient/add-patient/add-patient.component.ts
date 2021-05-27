@@ -14,9 +14,11 @@ export class AddPatientComponent implements OnInit, OnDestroy {
 
   @ViewChild(AddPatientFormComponent, { static: true }) addPatientFormComponent: AddPatientFormComponent;
 
-  subscription: Subscription;
+  subscription: Subscription[] = [];
 
   readonly ADD_PATIENT_FORM_TITLE = 'Add patient';
+
+  doctors$ = this.facadePatientService.doctors$;
 
   doctorOptions: TypeAheadInputOption[] = [];
 
@@ -25,7 +27,7 @@ export class AddPatientComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    this.facadePatientService.doctors$.subscribe(this.populateDoctorOptions.bind(this));
+    this.subscription.push(this.facadePatientService.doctors$.subscribe(this.populateDoctorOptions.bind(this)));
   }
 
   populateDoctorOptions(doctors: Doctor[]) {
@@ -44,21 +46,27 @@ export class AddPatientComponent implements OnInit, OnDestroy {
 
   createNewPatient(): Patient {
     const formData = this.addPatientFormComponent.patientFormGroup.value;
+    let chosenDoctor: Doctor = null;
+    this.doctors$.subscribe(doctors => {
+      chosenDoctor = doctors.find(doctor => doctor.id === formData.doctor);
+    });
     return {
-      // @todo: map appropriate fields
-      ...formData
+      ...formData,
+      doctor: {
+        ...chosenDoctor
+      }
     };
   }
 
   addPatient() {
     const patient = this.createNewPatient();
+    this.facadePatientService.addPatient(patient);
+
     // axios.post('...')
   }
 
   ngOnDestroy() {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
+    this.subscription.forEach(subscription => subscription.unsubscribe());
   }
 
 }

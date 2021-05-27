@@ -42,8 +42,6 @@ export class TypeAheadInputComponent implements ControlValueAccessor, OnInit, Er
   }
 
   registerOnChange(fn: (change) => void): void {
-    this.inputControl.valueChanges.subscribe(console.log);
-
     this.inputControl.valueChanges.subscribe(fn);
   }
 
