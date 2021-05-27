@@ -2,13 +2,15 @@
   {
     "id": 1,
     "registeredDate": "2018-10-13T23:50:12Z",
+    "birthDate": "2001-10-13T23:24:12Z",
     "firstName": "Mario",
     "lastName": "Rossi",
+    "VATCode": "32423",
     "doctor": 1,
+    "email": "aaa@bb.com",
     "addresses": [
       {
         "type": "HOME",
-        "email": "aaa@bb.com",
         "phone": "+3956789910",
         "street": "Via Tiburtina 59",
         "city": "Rome",
@@ -20,13 +22,15 @@
   {
     "id": 2,
     "registeredDate": "2018-10-12T11:23:57Z",
+    "birthDate": "2001-10-13T23:24:12Z",
     "firstName": "Francesco",
     "lastName": "Giuliani",
+    "VATCode": "32423",
+    "email": "aaa@bb.com",
     "doctor": 3,
     "addresses": [
       {
         "type": "HOME",
-        "email": "aaa@bb.com",
         "phone": "+3933522342234",
         "street": "Via Casilina 72",
         "city": "Rome",
@@ -35,7 +39,6 @@
       },
       {
         "type": "WORK",
-        "email": "aaa@bb.com",
         "phone": "+39062231124",
         "street": "Via Cassia 823",
         "city": "Rome",
@@ -48,12 +51,14 @@
     "id": 3,
     "registeredDate": "2018-10-16T13:51:28Z",
     "firstName": "Elico",
+    "birthDate": "2001-10-13T23:24:12Z",
     "lastName": "Maikenberg",
+    "email": "aaa@bb.com",
+    "VATCode": "32423",
     "doctor": 4,
     "addresses": [
       {
         "type": "HOME",
-        "email": "aaa@bb.com",
         "phone": "+39781123112",
         "street": "Piazza Risorgimento 44",
         "city": "Rome",
@@ -66,12 +71,14 @@
     "id": 4,
     "registeredDate": "2018-10-16T13:51:28Z",
     "firstName": "Vukasin",
+    "birthDate": "2001-10-13T23:24:12Z",
     "lastName": "Sevo",
+    "VATCode": "32423",
     "doctor": 4,
+    "email": "sevo2101s@yahoo.com",
     "addresses": [
       {
         "type": "HOME",
-        "email": "sevo2101s@yahoo.com",
         "phone": "+39781123112",
         "street": "Brace Spasi",
         "city": "Cacak",
@@ -85,11 +92,13 @@
     "registeredDate": "2018-10-16T13:51:28Z",
     "firstName": "Marko",
     "lastName": "Markovic",
+    "birthDate": "2001-10-13T23:24:12Z",
     "doctor": 2,
+    "VATCode": "32423",
+    "email": "markomarko@gmail.com",
     "addresses": [
       {
         "type": "HOME",
-        "email": "markomarko@gmail.com",
         "phone": "+39781123112",
         "street": "Ulica 195",
         "city": "Cacak",
@@ -102,12 +111,14 @@
     "id": 6,
     "registeredDate": "2018-10-16T13:51:28Z",
     "firstName": "Lazar",
+    "birthDate": "2001-10-13T23:24:12Z",
     "lastName": "Petrovic",
+    "VATCode": "32423",
+    "email": "laza@gmail.com",
     "doctor": 1,
     "addresses": [
       {
         "type": "HOME",
-        "email": "laza@gmail.com",
         "phone": "+39781123112",
         "street": "Ulica 285",
         "city": "Cacak",

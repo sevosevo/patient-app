@@ -11,7 +11,11 @@
     [formControlName]="lastNameControlName">
   </patient-app-text-input>
   <br>
-  <patient-app-date-picker></patient-app-date-picker>
+  <patient-app-date-picker
+    [label]="BIRTHDAY_LABEL"
+    [formControlName]="birthDateControlName"
+  ></patient-app-date-picker>
+  <br>
   <patient-app-text-input
     [label]="VAT_CODE_LABEL"
     [formControlName]="VATCodeControlName">

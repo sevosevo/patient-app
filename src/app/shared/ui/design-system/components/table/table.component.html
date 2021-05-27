@@ -14,7 +14,7 @@
       <ng-container *ngIf="isLinkColumn(column) && column.visible" [matColumnDef]="column.field">
         <th mat-header-cell *matHeaderCellDef>{{column.label}}</th>
         <td mat-cell *matCellDef="let row">
-          <a mat-stroked-button (click)="$event.stopPropagation();" [href]="column.href" target="_blank">
+          <a mat-stroked-button (click)="$event.stopPropagation();" [href]="column.href(row)" target="_blank">
             {{row[column.field]}}
           </a>
         </td>

@@ -1,8 +1,6 @@
 import {Injectable} from '@angular/core';
 import {ApiPatientService} from '../api';
 import {StatePatientService} from '../state';
-import {tap} from 'rxjs/operators';
-
 
 @Injectable({
   providedIn: 'root'

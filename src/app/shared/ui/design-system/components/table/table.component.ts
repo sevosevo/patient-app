@@ -16,7 +16,7 @@ export interface TableColumn {
 
 export interface LinkTableColumn extends TableColumn {
   type: TableColumnType.LINK;
-  href: string;
+  href: (row: unknown) => string;
 }
 
 @Component({

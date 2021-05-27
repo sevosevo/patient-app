@@ -39,13 +39,17 @@ export class PatientListComponent implements OnInit, OnDestroy {
     { label: 'Registration date', type: TableColumnType.DATE, field: 'registeredDate', visible: true },
     { label: 'Doctor\'s name', type: TableColumnType.TEXT, field: 'doctorName', visible: true, },
     { label: 'Home address', type: TableColumnType.TEXT, field: 'homeAddress', visible: true, },
-    { label: 'Email', type: TableColumnType.LINK, field: 'email', href: this.mailToHref, visible: true } as LinkTableColumn,
+    { label: 'Email', type: TableColumnType.LINK, field: 'email', href: this.createMailToHref, visible: true } as LinkTableColumn,
   ];
 
   constructor(
     private readonly facadePatientService: FacadePatientService,
     private readonly dialog: MatDialog,
   ) { }
+
+  createMailToHref(row: PatientTableData) {
+    return `mailto:${row.email}?subject=Subject example&body=Body example`;
+  }
 
   ngOnInit() {
     const subscription = this.updateDataSource();
@@ -80,10 +84,10 @@ export class PatientListComponent implements OnInit, OnDestroy {
     patientTableData.id = patient.id;
     patientTableData.firstName = patient.firstName;
     patientTableData.lastName = patient.lastName;
+    patientTableData.email = patient.email;
     patientTableData.homeAddress = this.getHomeAddressColumnData(patient);
     patientTableData.registeredDate = patient.registeredDate;
     patientTableData.doctorName = doctor.firstName + ' ' + doctor.lastName;
-    patientTableData.email = this.getHomeAddress(patient).email;
 
     return patientTableData as PatientTableData;
   }

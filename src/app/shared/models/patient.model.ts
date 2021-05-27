@@ -13,7 +13,6 @@ export interface Address {
   country: string;
   zipcode: string;
   type: AddressType;
-  email: string;
   phone: string;
 }
 

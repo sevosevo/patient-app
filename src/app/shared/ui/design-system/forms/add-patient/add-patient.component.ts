@@ -14,6 +14,7 @@ export class AddPatientComponent implements OnInit {
 
   readonly FIRST_NAME_LABEL = 'First Name';
   readonly LAST_NAME_LABEL = 'Last Name';
+  readonly BIRTHDAY_LABEL = 'Birthday';
   readonly VAT_CODE_LABEL = 'VATCode';
   readonly EMAIL_LABEL = 'Email';
 
@@ -58,6 +59,10 @@ export class AddPatientComponent implements OnInit {
     return this.patientFormGroup.get(this.emailControlName) as FormControl;
   }
 
+  get VATControl(): FormControl {
+    return this.patientFormGroup.get(this.VATCodeControlName) as FormControl;
+  }
+
   constructor() { }
 
   ngOnInit() {
@@ -69,7 +74,9 @@ export class AddPatientComponent implements OnInit {
   prefill() {
     this.firstNameControl.setValue(this.prefillForm.firstName);
     this.lastNameControl.setValue(this.prefillForm.lastName);
-
+    this.emailControl.setValue(this.prefillForm.email);
+    this.birthDateControl.setValue(this.prefillForm.birthDate);
+    this.VATControl.setValue(this.prefillForm.VATCode);
   }
 
 }
