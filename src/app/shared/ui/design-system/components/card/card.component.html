@@ -1,0 +1,11 @@
+<mat-card class="example-card">
+  <mat-card-header>
+    <mat-card-title>{{ title }}</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <ng-content></ng-content>
+  </mat-card-content>
+  <mat-card-actions *ngIf="showSaveButton">
+    <button [disabled]="saveButtonDisabled" mat-button>{{ saveButtonLabel }}</button>
+  </mat-card-actions>
+</mat-card>

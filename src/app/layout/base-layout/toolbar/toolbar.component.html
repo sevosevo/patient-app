@@ -1,0 +1,12 @@
+<mat-toolbar color="primary">
+  <button [matMenuTriggerFor]="menu" mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <span>{{ baseLayoutService.toolbarTitle$ | async }}</span>
+</mat-toolbar>
+<mat-menu #menu="matMenu">
+  <button routerLinkActive="active" [routerLink]="menuItem.path" mat-menu-item *ngFor="let menuItem of (baseLayoutService.menuItems$ | async)">
+    <mat-icon>{{ menuItem.icon }}</mat-icon>
+    <span>{{ menuItem.label }}</span>
+  </button>
+</mat-menu>
