@@ -1,10 +1,11 @@
 <patient-app-card
   [title]="SHOW_PATIENT_TITLE"
-  [showSaveButton]="false"
-  [showBackButton]="true"
+  [showSaveButton]="showSaveButton"
+  [showBackButton]="showBackButton"
   (backButtonClicked)="handleBackButtonClick()"
 >
   <div>Patient ID:  {{ patientId }}</div>
+  <div>Registered date:  {{ (patient$ | async).registeredDate | date }}</div>
   <br>
   <patient-app-add-patient-form
     [prefillForm]="patient$ | async"

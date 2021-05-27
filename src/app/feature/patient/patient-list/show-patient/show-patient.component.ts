@@ -15,6 +15,8 @@ export class ShowPatientComponent implements OnInit {
   @ViewChild(AddPatientComponent, { static: true }) AddPatientFormComponent: AddPatientComponent;
 
   readonly SHOW_PATIENT_TITLE = 'Patient details';
+  readonly showSaveButton = false;
+  readonly showBackButton = true;
 
   patient$: Observable<Patient> = of(null);
 
