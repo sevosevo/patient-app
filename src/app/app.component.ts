@@ -41,9 +41,6 @@ export class AppComponent implements OnInit {
 
     this.facadePatientService.getPatients();
     this.facadePatientService.getDoctors();
-
-    this.facadePatientService.patients$.subscribe(patients => console.log('Got patients ', patients));
-    this.facadePatientService.doctors$.subscribe(doctors => console.log('Got doctors', doctors));
   }
 
   initializeLayout() {
