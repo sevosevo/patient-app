@@ -5,6 +5,8 @@
   <patient-app-table
     [dataSource]="dataSource"
     [visibleColumns]="visibleColumns"
+    [pageSize]="PAGE_SIZE"
+    (tableRowClicked)="handleTableRowClicked($event)"
   >
   </patient-app-table>
 </patient-app-card>

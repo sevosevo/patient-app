@@ -14,4 +14,8 @@ export class CardComponent {
   @Input() saveButtonLabel = 'Save';
   @Output() saveButtonClicked = new EventEmitter<void>();
 
+  @Input() showBackButton = false;
+  @Input() backButtonLabel = 'Back';
+  @Output() backButtonClicked = new EventEmitter<void>();
+
 }

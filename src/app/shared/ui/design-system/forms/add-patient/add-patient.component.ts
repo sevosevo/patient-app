@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {EmailValidator} from '../../../../validators';
+import {Patient} from '../../../../models';
 
 @Component({
   selector: 'patient-app-add-patient-form',
@@ -8,6 +9,8 @@ import {EmailValidator} from '../../../../validators';
   styleUrls: ['./add-patient.component.css']
 })
 export class AddPatientComponent implements OnInit {
+
+  @Input() prefillForm: Partial<Patient>;
 
   readonly FIRST_NAME_LABEL = 'First Name';
   readonly LAST_NAME_LABEL = 'Last Name';
@@ -58,6 +61,15 @@ export class AddPatientComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    if (this.prefillForm) {
+      this.prefill();
+    }
+  }
+
+  prefill() {
+    this.firstNameControl.setValue(this.prefillForm.firstName);
+    this.lastNameControl.setValue(this.prefillForm.lastName);
+
   }
 
 }

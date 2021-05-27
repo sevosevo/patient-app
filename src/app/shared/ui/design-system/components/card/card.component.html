@@ -5,7 +5,8 @@
   <mat-card-content>
     <ng-content></ng-content>
   </mat-card-content>
-  <mat-card-actions *ngIf="showSaveButton">
-    <button (click)="saveButtonClicked.next()" [disabled]="saveButtonDisabled" mat-button>{{ saveButtonLabel }}</button>
+  <mat-card-actions>
+    <button *ngIf="showSaveButton" (click)="saveButtonClicked.next()" [disabled]="saveButtonDisabled" mat-button>{{ saveButtonLabel }}</button>
+    <button *ngIf="showBackButton" (click)="backButtonClicked.next()" mat-button>{{ backButtonLabel }}</button>
   </mat-card-actions>
 </mat-card>

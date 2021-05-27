@@ -1,0 +1,11 @@
+.mat-table {
+  width: 100%;
+}
+th.mat-header-cell, td.mat-cell {
+  text-align: center !important;
+}
+
+.mat-row:hover .mat-cell {
+  border-color: black;
+  cursor: pointer;
+}

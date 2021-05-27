@@ -61,5 +61,59 @@
         "country": "Italy"
       }
     ]
+  },
+  {
+    "id": 4,
+    "registeredDate": "2018-10-16T13:51:28Z",
+    "firstName": "Vukasin",
+    "lastName": "Sevo",
+    "doctor": 4,
+    "addresses": [
+      {
+        "type": "HOME",
+        "email": "sevo2101s@yahoo.com",
+        "phone": "+39781123112",
+        "street": "Brace Spasi",
+        "city": "Cacak",
+        "zipcode": "32000",
+        "country": "Serbia"
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "registeredDate": "2018-10-16T13:51:28Z",
+    "firstName": "Marko",
+    "lastName": "Markovic",
+    "doctor": 2,
+    "addresses": [
+      {
+        "type": "HOME",
+        "email": "markomarko@gmail.com",
+        "phone": "+39781123112",
+        "street": "Ulica 195",
+        "city": "Cacak",
+        "zipcode": "32000",
+        "country": "Serbia"
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "registeredDate": "2018-10-16T13:51:28Z",
+    "firstName": "Lazar",
+    "lastName": "Petrovic",
+    "doctor": 1,
+    "addresses": [
+      {
+        "type": "HOME",
+        "email": "laza@gmail.com",
+        "phone": "+39781123112",
+        "street": "Ulica 285",
+        "city": "Cacak",
+        "zipcode": "32000",
+        "country": "Serbia"
+      }
+    ]
   }
 ]

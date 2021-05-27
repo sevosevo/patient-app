@@ -1,14 +1,22 @@
-import {Component, Input} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
+import {MatPaginator, MatTableDataSource} from '@angular/material';
 
 export enum TableColumnType {
   TEXT = 'text',
-  DATE = 'date', // @todo: add support for this type
+  DATE = 'date',
+  LINK = 'link',
 }
 
 export interface TableColumn {
+  visible: boolean;
   field: string;
   label: string;
   type: TableColumnType;
+}
+
+export interface LinkTableColumn extends TableColumn {
+  type: TableColumnType.LINK;
+  href: string;
 }
 
 @Component({
@@ -16,16 +24,33 @@ export interface TableColumn {
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.css'],
 })
-export class TableComponent {
+export class TableComponent implements OnInit {
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
   readonly TableColumnType = TableColumnType;
 
-  @Input() dataSource: any[];
+  // tslint:disable-next-line:variable-name
+  @Input('dataSource') _dataSource: any[];
 
   @Input() visibleColumns: TableColumn[];
 
+  @Input() pageSize = 4;
+
+  @Output() tableRowClicked = new EventEmitter<any>();
+
+  dataSource: MatTableDataSource<any>;
+
   get columnFields(): Iterable<string> {
-    return this.visibleColumns.map(column => column.field);
+    return this.visibleColumns.filter(column => column.visible).map(column => column.field);
+  }
+
+  isLinkColumn(column: TableColumn): column is LinkTableColumn {
+    return column.type === TableColumnType.LINK;
+  }
+
+  ngOnInit() {
+    this.dataSource = new MatTableDataSource<any>(this._dataSource);
+    this.dataSource.paginator = this.paginator;
   }
 
 }
