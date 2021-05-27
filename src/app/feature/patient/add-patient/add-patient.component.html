@@ -3,6 +3,8 @@
   [saveButtonDisabled]="!addPatientFormComponent.patientFormGroup.valid"
   (saveButtonClicked)="addPatient()"
 >
-  <patient-app-add-patient-form>
+  <patient-app-add-patient-form
+    [doctorOptions]="doctorOptions"
+  >
   </patient-app-add-patient-form>
 </patient-app-card>

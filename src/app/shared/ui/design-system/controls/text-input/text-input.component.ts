@@ -1,7 +1,8 @@
 import {Component, Input, OnInit, Optional, Self} from '@angular/core';
 import {
   ControlValueAccessor,
-  FormControl, FormGroupDirective,
+  FormControl,
+  FormGroupDirective,
   NgControl,
   NgForm,
 } from '@angular/forms';

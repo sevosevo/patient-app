@@ -2,11 +2,21 @@
   <mat-label>{{ label }}</mat-label>
   <input
     matInput
+    [errorStateMatcher]="this"
     [matDatepicker]="picker"
-    [disabled]="isDisabled"
-    [placeholder]="placeholder" [(value)]="value"
-    (dateChange)="dateValueChanged()"
+    [max]="maxDate"
+    [formControl]="inputControl"
+    [placeholder]="placeholder"
   >
+  <mat-error *ngIf="!ngControl.valid">
+    <ng-container *ngFor="let error of errorToMessageMap | keyvalue">
+      <ng-container
+        *ngIf="ngControl.errors ? ngControl?.errors[error.key] : false"
+      >
+        {{ error.value }}
+      </ng-container>
+    </ng-container>
+  </mat-error>
   <mat-datepicker-toggle matSuffix [for]="picker">
     <mat-icon matDatepickerToggleIcon>calendar_today</mat-icon>
   </mat-datepicker-toggle>

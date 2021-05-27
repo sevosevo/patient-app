@@ -22,8 +22,6 @@ interface PatientTableData {
 })
 export class PatientListComponent implements OnInit, OnDestroy {
 
-  readonly mailToHref = `mailto:patient-app@gmail.com?subject=Hi&body=Hello this is mock message`;
-
   readonly PAGE_SIZE = 4;
 
   readonly PATIENT_LIST_TABLE_TITLE = 'List of patients';

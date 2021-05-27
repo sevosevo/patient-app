@@ -12,12 +12,14 @@
   </patient-app-text-input>
   <br>
   <patient-app-date-picker
+    [errorToMessageMap]="birthdayErrorMessageMap"
     [label]="BIRTHDAY_LABEL"
     [formControlName]="birthDateControlName"
   ></patient-app-date-picker>
   <br>
   <patient-app-text-input
     [label]="VAT_CODE_LABEL"
+    [errorToMessageMap]="vatErrorMessageMap"
     [formControlName]="VATCodeControlName">
   </patient-app-text-input>
   <br>
@@ -26,4 +28,13 @@
     [label]="EMAIL_LABEL"
     [formControlName]="emailControlName">
   </patient-app-text-input>
+  <br>
+  <patient-app-type-ahead-input
+    [label]="DOCTOR_LABEL"
+    [errorToMessageMap]="doctorErrorMessageMap"
+    [options]="doctorOptions"
+    [optionKey]="'name'"
+    [formControlName]="doctorControlName"
+  >
+  </patient-app-type-ahead-input>
 </form>

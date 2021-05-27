@@ -1,41 +1,70 @@
-import { Component, Input } from '@angular/core';
-import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
+import {Component, Input, OnInit, Optional, Self} from '@angular/core';
+import {ControlValueAccessor, FormControl, FormGroupDirective, NgControl, NgForm} from '@angular/forms';
+import {ErrorStateMatcher} from '@angular/material';
 
 @Component({
   selector: 'patient-app-date-picker',
   templateUrl: './date-picker.component.html',
   styleUrls: ['./date-picker.component.css'],
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: DatePickerComponent,
-      multi: true,
-    }
-  ]
 })
-export class DatePickerComponent implements ControlValueAccessor {
-  value: Date = new Date();
-  isDisabled = false;
+export class DatePickerComponent implements ControlValueAccessor, ErrorStateMatcher, OnInit {
   @Input() placeholder: string;
   @Input() label: string;
+
+  maxDate!: Date;
 
   private onChange: (obj: Date) => void;
   private onTouch: () => void;
 
+  @Input()
+  errorToMessageMap: Record<string, string> = {};
+
+  inputControl: FormControl = new FormControl(null);
+
+  constructor(@Optional() @Self() public ngControl: NgControl) {
+    if (this.ngControl) {
+      this.ngControl.valueAccessor = this;
+    }
+  }
+
+  ngOnInit(): void {
+    this.getMaxDate();
+  }
+
+  getMaxDate() {
+    this.maxDate = new Date(Date.now());
+  }
+
   writeValue(obj: Date): void {
-    this.value = obj;
+    this.inputControl.setValue(obj);
   }
+
   registerOnChange(fn: (obj: Date) => void): void {
-    this.onChange = fn;
+    this.inputControl.valueChanges.subscribe(fn);
   }
+
   setDisabledState(isDisabled: boolean) {
-    this.isDisabled = isDisabled;
+    if (isDisabled) {
+      this.inputControl.disable();
+    } else {
+      this.inputControl.enable();
+    }
   }
 
   registerOnTouched(fn: () => void): void {
     this.onTouch = fn;
   }
-  dateValueChanged(): void {
-    this.onChange(this.value);
+
+  isErrorState(
+    control: FormControl | null,
+    form: FormGroupDirective | NgForm | null
+  ): boolean {
+    return (
+      !!(control && control.invalid && (control.dirty || control.touched)) ||
+      (this.ngControl &&
+        this.ngControl.invalid &&
+        (this.ngControl.dirty || this.ngControl.touched))
+    );
   }
+
 }

@@ -32,6 +32,7 @@ import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatPaginatorModule} from '@angular/material/paginator';
+import {MatAutocompleteModule} from '@angular/material';
 
 const matModules = [
   MatTreeModule,
@@ -72,6 +73,7 @@ const matModules = [
   MatStepperModule,
   MatSnackBarModule,
   MatPaginatorModule,
+  MatAutocompleteModule,
 ];
 
 @NgModule({
