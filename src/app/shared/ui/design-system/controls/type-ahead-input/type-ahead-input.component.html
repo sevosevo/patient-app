@@ -1,0 +1,18 @@
+<mat-form-field class="example-full-width">
+  <mat-label>{{ label }}</mat-label>
+  <input [errorStateMatcher]="this" type="text" matInput [formControl]="inputControl" [matAutocomplete]="auto">
+  <mat-autocomplete #auto="matAutocomplete">
+    <mat-option *ngFor="let option of filteredOptions | async" [value]="option[this.optionKey]">
+      {{option[this.optionKey]}}
+    </mat-option>
+  </mat-autocomplete>
+  <mat-error *ngIf="!ngControl.valid">
+    <ng-container *ngFor="let error of errorToMessageMap | keyvalue">
+      <ng-container
+        *ngIf="ngControl.errors ? ngControl?.errors[error.key] : false"
+      >
+        {{ error.value }}
+      </ng-container>
+    </ng-container>
+  </mat-error>
+</mat-form-field>
