@@ -1,7 +1,6 @@
 import {NgModule} from '@angular/core';
 import {Routes, RouterModule} from '@angular/router';
-import {HomeComponent} from './feature';
-import {AddPatientComponent, PatientListComponent} from './feature';
+import {AddPatientComponent, PatientListComponent, HomeComponent} from './feature';
 
 const routes: Routes = [
   {
