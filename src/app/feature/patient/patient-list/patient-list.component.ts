@@ -9,7 +9,7 @@ interface PatientTableData {
   id: number;
   firstName: string;
   lastName: string;
-  registeredDate: Date;
+  registeredDate: Date | string;
   doctorName: string;
   homeAddress: string;
   email: string;
@@ -92,6 +92,9 @@ export class PatientListComponent implements OnInit, OnDestroy {
 
   getHomeAddressColumnData(patient: Patient): string {
     const homeAddress = this.getHomeAddress(patient);
+    if (!homeAddress) {
+      return '';
+    }
     return `${homeAddress.street} ${homeAddress.city} ${homeAddress.zipcode} ${homeAddress.country}`;
   }
 
@@ -102,7 +105,7 @@ export class PatientListComponent implements OnInit, OnDestroy {
   }
 
   private getHomeAddress(patient: Patient): Address {
-    return patient.addresses.find(address => address.type === AddressType.HOME);
+    return (patient.addresses || []).find(address => address.type === AddressType.HOME);
   }
 
 }

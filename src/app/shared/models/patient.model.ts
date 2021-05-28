@@ -22,8 +22,8 @@ export interface Patient {
   id: number;
   firstName: string;
   lastName: string;
-  birthDate: Date;
-  registeredDate: Date;
+  birthDate: Date | string;
+  registeredDate: Date | string;
   VATCode: string;
   email: string;
   doctor: string | number | Doctor;

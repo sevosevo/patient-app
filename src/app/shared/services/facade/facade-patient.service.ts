@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {ApiPatientService} from '../api';
 import {StatePatientService} from '../state';
 import {Patient} from '../../models';
-import {first} from 'rxjs/operators';
+import {first, map} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -16,6 +16,8 @@ export class FacadePatientService {
 
   doctors$ = this.statePatientService.doctors$;
   patients$ = this.statePatientService.patients$;
+
+  lastPatientId$ = this.patients$.pipe(map(patients => patients[patients.length - 1].id));
 
   getDoctors(): void {
     this.apiPatientService.getDoctors()

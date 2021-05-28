@@ -1,9 +1,10 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import axios from 'axios';
 
-import {AddPatientComponent as AddPatientFormComponent, FacadePatientService, TypeAheadInputOption} from '../../../shared';
+import {AddPatientComponent as AddPatientFormComponent, FacadePatientService, patientFactory, TypeAheadInputOption} from '../../../shared';
 import {Doctor, Patient} from '../../../shared/models';
 import {Subscription} from 'rxjs';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'patient-app-add-patient',
@@ -24,6 +25,7 @@ export class AddPatientComponent implements OnInit, OnDestroy {
 
   constructor(
     private readonly facadePatientService: FacadePatientService,
+    private readonly router: Router,
   ) { }
 
   ngOnInit() {
@@ -47,22 +49,24 @@ export class AddPatientComponent implements OnInit, OnDestroy {
   createNewPatient(): Patient {
     const formData = this.addPatientFormComponent.patientFormGroup.value;
     let chosenDoctor: Doctor = null;
+    let newPatient: Patient = null;
     this.doctors$.subscribe(doctors => {
-      chosenDoctor = doctors.find(doctor => doctor.id === formData.doctor);
+      chosenDoctor = doctors.find(doctor => doctor.firstName + ' ' + doctor.lastName === formData.doctor);
     });
-    return {
-      ...formData,
-      doctor: {
-        ...chosenDoctor
-      }
-    };
+    this.facadePatientService.lastPatientId$.subscribe(lastId => {
+      newPatient = patientFactory(
+        formData,
+        chosenDoctor.id,
+        lastId,
+      );
+    });
+    return newPatient;
   }
 
   addPatient() {
     const patient = this.createNewPatient();
     this.facadePatientService.addPatient(patient);
-
-    // axios.post('...')
+    this.router.navigate(['/home']).then();
   }
 
   ngOnDestroy() {
