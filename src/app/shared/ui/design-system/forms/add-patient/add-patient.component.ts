@@ -52,17 +52,32 @@ export class AddPatientComponent implements OnInit {
   readonly typeControlName = 'type';
   readonly nameControlName = 'name';
 
-  patientFormGroup = new FormGroup({
-    [this.firstNameControlName]: new FormControl('', Validators.required),
-    [this.lastNameControlName]: new FormControl('', Validators.required),
-    [this.birthDateControlName]: new FormControl(null, Validators.required),
-    [this.emailControlName]: new FormControl('', [Validators.required, EmailValidator.isValidMailFormat]),
-    [this.VATCodeControlName]: new FormControl('', Validators.required),
-    [this.doctorControlName]: new FormControl('', [Validators.required, this.doctorExists.bind(this)]),
-    [this.addressesControlName]: new FormArray([
-      this.createAddressFormGroup(true),
-    ]),
-  });
+  patientFormGroup: FormGroup;
+
+  ngOnInit() {
+    this.createPatientFormGroup(this.prefillForm);
+
+    this.toggleVatControlBasedOnAge();
+    this.toggleNameControlBasedOnAddressType();
+  }
+
+  createPatientFormGroup(prefillForm: Partial<Patient>) {
+    this.patientFormGroup = new FormGroup({
+      [this.firstNameControlName]: new FormControl('', Validators.required),
+      [this.lastNameControlName]: new FormControl('', Validators.required),
+      [this.birthDateControlName]: new FormControl(null, Validators.required),
+      [this.emailControlName]: new FormControl('', [Validators.required, EmailValidator.isValidMailFormat]),
+      [this.VATCodeControlName]: new FormControl('', Validators.required),
+      [this.doctorControlName]: new FormControl('', [Validators.required, this.doctorExists.bind(this)]),
+      [this.addressesControlName]: new FormArray([
+        this.createAddressFormGroup(true),
+      ]),
+    });
+
+    if (this.prefillForm) {
+      this.prefill(prefillForm);
+    }
+  }
 
   // I left this getter in order to be able to cast this control to FormArray (so template doesn't throw an error)
   get addressControl(): FormArray {
@@ -98,15 +113,6 @@ export class AddPatientComponent implements OnInit {
   }
 
   constructor() { }
-
-  ngOnInit() {
-    this.toggleVatControlBasedOnAge();
-    this.toggleNameControlBasedOnAddressType();
-
-    if (this.prefillForm) {
-      this.prefill();
-    }
-  }
 
   toggleNameControlBasedOnAddressType() {
     if (this.addressTypeChangeSubscription && !this.addressTypeChangeSubscription.closed) {
@@ -149,13 +155,13 @@ export class AddPatientComponent implements OnInit {
     control.setValue('+39' + control.value);
   }
 
-  prefill() {
-    this.patientFormGroup.get(this.firstNameControlName).setValue(this.prefillForm[this.firstNameControlName]);
-    this.patientFormGroup.get(this.lastNameControlName).setValue(this.prefillForm[this.lastNameControlName]);
-    this.patientFormGroup.get(this.emailControlName).setValue(this.prefillForm[this.emailControlName]);
-    this.patientFormGroup.get(this.birthDateControlName).setValue(this.prefillForm[this.birthDateControlName]);
-    this.patientFormGroup.get(this.VATCodeControlName).setValue(this.prefillForm[this.VATCodeControlName]);
-    this.patientFormGroup.get(this.doctorControlName).setValue(this.prefillForm.doctor);
+  prefill(prefillForm: Partial<Patient>) {
+    this.patientFormGroup.get(this.firstNameControlName).setValue(prefillForm[this.firstNameControlName]);
+    this.patientFormGroup.get(this.lastNameControlName).setValue(prefillForm[this.lastNameControlName]);
+    this.patientFormGroup.get(this.emailControlName).setValue(prefillForm[this.emailControlName]);
+    this.patientFormGroup.get(this.birthDateControlName).setValue(prefillForm[this.birthDateControlName]);
+    this.patientFormGroup.get(this.VATCodeControlName).setValue(prefillForm[this.VATCodeControlName]);
+    this.patientFormGroup.get(this.doctorControlName).setValue(prefillForm.doctor);
     // Prefill home address
     this.prefillAddress(
       (this.patientFormGroup.get(this.addressesControlName) as FormArray).controls[0] as FormGroup,
@@ -165,10 +171,12 @@ export class AddPatientComponent implements OnInit {
     if (this.prefillForm.addresses.length > 1) {
       this.createPrefillAddressForms();
     }
+
+    setTimeout(() => this.patientFormGroup.disable());
   }
 
   createPrefillAddressForms() {
-    this.prefillForm.addresses.slice(1).forEach((address, idx) => {
+    this.prefillForm[this.addressesControlName].slice(1).forEach((address, idx) => {
       (this.patientFormGroup.get(this.addressesControlName) as FormArray).push(this.createAddressFormGroup(false));
       // Prefill form in next cycle
       setTimeout(() => {

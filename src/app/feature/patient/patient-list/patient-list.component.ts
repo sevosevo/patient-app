@@ -116,13 +116,6 @@ export class PatientListComponent implements OnInit, OnDestroy {
     this.patient.doctor = row.doctorName;
 
     this.dialogRef = this.dialog.open(this.showPatientTemplate, { width: '600px', height: '600px' });
-    this.disableAllFormFields();
-  }
-
-  disableAllFormFields() {
-    setTimeout(() => {
-      this.AddPatientFormComponent.patientFormGroup.disable();
-    });
   }
 
   private getHomeAddress(patient: Patient): Address {

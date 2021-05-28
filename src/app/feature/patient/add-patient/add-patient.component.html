@@ -1,6 +1,6 @@
 <patient-app-card
   [title]="ADD_PATIENT_FORM_TITLE"
-  [saveButtonDisabled]="!addPatientFormComponent.patientFormGroup.valid"
+  [saveButtonDisabled]="!addPatientFormComponent.patientFormGroup || !addPatientFormComponent.patientFormGroup.valid"
   (saveButtonClicked)="addPatient()"
 >
   <patient-app-add-patient-form
