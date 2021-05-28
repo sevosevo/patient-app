@@ -34,9 +34,14 @@ export class GetTimeUtility {
 
 
   static calculateAge(date: Date): number {
-    const ageDif = Date.now() - date.getTime();
-    const ageDate = new Date(ageDif);
-    return Math.abs(ageDate.getUTCFullYear() - 1970);
+    const today = new Date();
+    let age = today.getFullYear() - date.getFullYear();
+    const month = today.getMonth() - date.getMonth();
+    const day = today.getDate() - date.getDate();
+    if (month < 0 || (month === 0 && day < 0)) {
+      age--;
+    }
+    return age;
   }
 
 
