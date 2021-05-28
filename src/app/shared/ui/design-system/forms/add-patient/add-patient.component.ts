@@ -1,7 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {AbstractControl, FormArray, FormControl, FormGroup, ValidationErrors, Validators} from '@angular/forms';
 import {EmailValidator} from '../../../../validators';
-import {AddressType, Patient} from '../../../../models';
+import {Address, AddressType, Patient} from '../../../../models';
 import {GetTimeUtility} from '../../../../utilities';
 import {TypeAheadInputOption} from '../../controls';
 import {Subscription} from 'rxjs';
@@ -226,7 +226,7 @@ export class AddPatientComponent implements OnInit {
     });
   }
 
-  prefillAddress(addressFormGroup: FormGroup, addressData: any) {
+  prefillAddress(addressFormGroup: FormGroup, addressData: Address) {
     addressFormGroup.get(this.phoneControlName).setValue(addressData[this.phoneControlName]);
     addressFormGroup.get(this.zipControlName).setValue(addressData[this.zipControlName]);
     addressFormGroup.get(this.streetControlName).setValue(addressData[this.streetControlName]);
