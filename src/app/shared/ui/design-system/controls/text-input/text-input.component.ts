@@ -18,6 +18,9 @@ export class TextInputComponent implements ControlValueAccessor, OnInit, ErrorSt
   @Input() label: string;
   @Input() placeholder: string;
 
+  @Input() removeSpaces: boolean;
+
+
   @Input()
   errorToMessageMap: Record<string, string> = {};
 
@@ -33,7 +36,11 @@ export class TextInputComponent implements ControlValueAccessor, OnInit, ErrorSt
   }
 
   registerOnChange(fn: (change) => void): void {
-    this.inputControl.valueChanges.subscribe(fn);
+    this.inputControl.valueChanges.subscribe(val => this.removeSpaces ? fn(this.removeSpacesFn(val)) : fn(val));
+  }
+
+  removeSpacesFn(val: string): string {
+    return val.replace(/ /g, '');
   }
 
   setDisabledState(isDisabled: boolean): void {

@@ -11,6 +11,7 @@ import {
 import {Doctor, Patient} from '../../../shared/models';
 import {Subscription} from 'rxjs';
 import {Router} from '@angular/router';
+import {MatSnackBar} from '@angular/material';
 
 @Component({
   selector: 'patient-app-add-patient',
@@ -24,6 +25,7 @@ export class AddPatientComponent implements OnInit, OnDestroy {
   subscription: Subscription[] = [];
 
   readonly ADD_PATIENT_FORM_TITLE = 'Add patient';
+  readonly PATIENT_ADDED_SNACKBAR_MESSAGE = 'Patient successfully added';
 
   doctors$ = this.facadePatientService.doctors$;
 
@@ -32,6 +34,7 @@ export class AddPatientComponent implements OnInit, OnDestroy {
   constructor(
     private readonly facadePatientService: FacadePatientService,
     private readonly router: Router,
+    private snackbar: MatSnackBar,
   ) { }
 
   ngOnInit() {
@@ -72,7 +75,11 @@ export class AddPatientComponent implements OnInit, OnDestroy {
   addPatient() {
     const patient = this.createNewPatient();
     this.facadePatientService.addPatient(patient);
-    this.router.navigate(['/home']).then();
+    this.router.navigate(['/home']).then(() => {
+      this.snackbar.open(this.PATIENT_ADDED_SNACKBAR_MESSAGE, 'Close', {
+        duration: 3000,
+      });
+    });
   }
 
   ngOnDestroy() {
