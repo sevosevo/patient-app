@@ -61,12 +61,7 @@ export class TextInputComponent implements ControlValueAccessor, OnInit, ErrorSt
     control: FormControl | null,
     form: FormGroupDirective | NgForm | null
   ): boolean {
-    return (
-      !!(control && control.invalid && (control.dirty || control.touched)) ||
-      (this.ngControl &&
-        this.ngControl.invalid &&
-        (this.ngControl.dirty || this.ngControl.touched))
-    );
+    return (control.touched || control.dirty) && this.ngControl.invalid;
   }
 
 }
