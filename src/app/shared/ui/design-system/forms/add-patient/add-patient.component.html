@@ -1,99 +1,109 @@
 <form [formGroup]="patientFormGroup">
-  <patient-app-text-input
-    [errorToMessageMap]="firstNameErrorMessageMap"
-    [label]="FIRST_NAME_LABEL"
-    [formControlName]="firstNameControlName">
-  </patient-app-text-input>
-  <br>
-  <patient-app-text-input
-    [errorToMessageMap]="lastNameErrorMessageMap"
-    [label]="LAST_NAME_LABEL"
-    [formControlName]="lastNameControlName">
-  </patient-app-text-input>
-  <br>
-  <patient-app-date-picker
-    [errorToMessageMap]="birthdayErrorMessageMap"
-    [label]="BIRTHDAY_LABEL"
-    [formControlName]="birthDateControlName"
-  ></patient-app-date-picker>
-  <br>
-  <patient-app-text-input
-    [label]="VAT_CODE_LABEL"
-    [errorToMessageMap]="vatErrorMessageMap"
-    [formControlName]="VATCodeControlName">
-  </patient-app-text-input>
-  <br>
-  <patient-app-text-input
-    [errorToMessageMap]="emailErrorMessageMap"
-    [label]="EMAIL_LABEL"
-    [formControlName]="emailControlName">
-  </patient-app-text-input>
-  <br>
-  <patient-app-type-ahead-input
-    [label]="DOCTOR_LABEL"
-    [errorToMessageMap]="doctorErrorMessageMap"
-    [options]="doctorOptions"
-    [optionKey]="'name'"
-    [formControlName]="doctorControlName"
-  >
-  </patient-app-type-ahead-input>
-
-  <div>Addresses: </div>
-  <br>
-
-  <button *ngIf="!prefillForm" (click)="addAddressForm();">Add new address</button>
-
-  <div [formArrayName]="addressesControlName" *ngFor="let control of addressesControl.controls; let i = index">
-    <button *ngIf="i > 0 && !prefillForm" (click)="removeAddressForm(i)">Remove address</button>
-    <div [formGroupName]="i+''">
-      <div *ngIf="i === 0">{{ 'Home address:' }}</div>
-      <div *ngIf="i === 1">{{ 'Other addresses:' }}</div>
-      <mat-form-field *ngIf="i > 0" appearance="fill">
-        <mat-label>Type</mat-label>
-        <mat-select [formControlName]="typeControlName">
-          <mat-option *ngFor="let address of addressTypes" [value]="address">
-            {{ address }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
+  <div class="patient-form">
+    <div class="patient-details-form">
+      <h4>Patient's details</h4>
+      <br>
 
       <patient-app-text-input
-        [label]="PHONE_LABEL"
-        [errorToMessageMap]="phoneErrorMessageMap"
-        [removeSpaces]="true"
-        [formControlName]="phoneControlName">
+        [errorToMessageMap]="firstNameErrorMessageMap"
+        [label]="FIRST_NAME_LABEL"
+        [formControlName]="firstNameControlName">
       </patient-app-text-input>
+      <br>
       <patient-app-text-input
-        *ngIf="control.get(nameControlName).enabled"
-        [label]="NAME_LABEL"
-        [errorToMessageMap]="nameErrorMessageMap"
-        [formControlName]="nameControlName">
+        [errorToMessageMap]="lastNameErrorMessageMap"
+        [label]="LAST_NAME_LABEL"
+        [formControlName]="lastNameControlName">
       </patient-app-text-input>
+      <br>
+      <patient-app-date-picker
+        [errorToMessageMap]="birthdayErrorMessageMap"
+        [label]="BIRTHDAY_LABEL"
+        [formControlName]="birthDateControlName"
+      ></patient-app-date-picker>
+      <br>
       <patient-app-text-input
-        [formControlName]="streetControlName"
-        [errorToMessageMap]="streetErrorMessageMap"
-        [label]="STREET_LABEL"
+        [label]="VAT_CODE_LABEL"
+        [errorToMessageMap]="vatErrorMessageMap"
+        [formControlName]="VATCodeControlName">
+      </patient-app-text-input>
+      <br>
+      <patient-app-text-input
+        [errorToMessageMap]="emailErrorMessageMap"
+        [label]="EMAIL_LABEL"
+        [formControlName]="emailControlName">
+      </patient-app-text-input>
+      <br>
+      <patient-app-type-ahead-input
+        [label]="DOCTOR_LABEL"
+        [errorToMessageMap]="doctorErrorMessageMap"
+        [options]="doctorOptions"
+        [optionKey]="'name'"
+        [formControlName]="doctorControlName"
       >
-      </patient-app-text-input>
-      <patient-app-text-input
-        [formControlName]="cityControlName"
-        [errorToMessageMap]="cityErrorMessageMap"
-        [label]="CITY_LABEL"
-      >
-      </patient-app-text-input>
-      <patient-app-text-input
-        [label]="ZIP_LABEL"
-        [errorToMessageMap]="zipcodeErrorMessageMap"
-        [formControlName]="zipControlName"
-      >
-      </patient-app-text-input>
-      <patient-app-text-input
-        [label]="COUNTRY_LABEL"
-        [errorToMessageMap]="countryErrorMessageMap"
-        [formControlName]="countryControlName"
-      >
-      </patient-app-text-input>
+      </patient-app-type-ahead-input>
+    </div>
+    <div class="patient-addresses-form">
+      <h4>Patient's address information</h4>
+      <br>
+
+      <div [formArrayName]="addressesControlName" *ngFor="let control of addressesControl.controls; let i = index">
+        <div [formGroupName]="i+''">
+          <div *ngIf="i === 0">{{ 'Home address:' }}</div>
+          <div *ngIf="i === 1">{{ 'Other addresses:' }}</div>
+          <mat-form-field *ngIf="i > 0" appearance="fill">
+            <mat-label>Type</mat-label>
+            <mat-select [formControlName]="typeControlName">
+              <mat-option *ngFor="let address of addressTypes" [value]="address">
+                {{ address }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <patient-app-text-input
+            [label]="PHONE_LABEL"
+            [errorToMessageMap]="phoneErrorMessageMap"
+            [removeSpaces]="true"
+            [formControlName]="phoneControlName">
+          </patient-app-text-input>
+          <patient-app-text-input
+            *ngIf="control.get(nameControlName).enabled"
+            [label]="NAME_LABEL"
+            [errorToMessageMap]="nameErrorMessageMap"
+            [formControlName]="nameControlName">
+          </patient-app-text-input>
+          <patient-app-text-input
+            [formControlName]="streetControlName"
+            [errorToMessageMap]="streetErrorMessageMap"
+            [label]="STREET_LABEL"
+          >
+          </patient-app-text-input>
+          <patient-app-text-input
+            [formControlName]="cityControlName"
+            [errorToMessageMap]="cityErrorMessageMap"
+            [label]="CITY_LABEL"
+          >
+          </patient-app-text-input>
+          <patient-app-text-input
+            [label]="ZIP_LABEL"
+            [errorToMessageMap]="zipcodeErrorMessageMap"
+            [formControlName]="zipControlName"
+          >
+          </patient-app-text-input>
+          <patient-app-text-input
+            [label]="COUNTRY_LABEL"
+            [errorToMessageMap]="countryErrorMessageMap"
+            [formControlName]="countryControlName"
+          >
+          </patient-app-text-input>
+          <button mat-mini-fab color="primary" *ngIf="!prefillForm && i === 0" (click)="addAddressForm();">
+            <mat-icon>add</mat-icon>
+          </button>
+          <button mat-mini-fab color="warn" *ngIf="i > 0 && !prefillForm" (click)="removeAddressForm(i)">
+            <mat-icon>remove</mat-icon>
+          </button>
+        </div>
+      </div>
     </div>
   </div>
-
 </form>
