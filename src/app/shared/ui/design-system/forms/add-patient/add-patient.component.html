@@ -37,4 +37,55 @@
     [formControlName]="doctorControlName"
   >
   </patient-app-type-ahead-input>
+
+  <div>Addresses: </div>
+  <br>
+
+  <button *ngIf="!prefillForm" (click)="addAddressForm();">Add new address</button>
+
+  <div [formArrayName]="addressesControlName" *ngFor="let item of addressesControl.controls; let i = index">
+    <button *ngIf="i > 0 && !prefillForm" (click)="removeAddressForm(i)">Remove address</button>
+    <div [formGroupName]="i+''">
+      <div>{{ i === 0 ? 'Home address' : 'Other address'}}</div>
+      <mat-form-field *ngIf="i > 0" appearance="fill">
+        <mat-label>Type</mat-label>
+        <mat-select [formControlName]="typeControlName">
+          <mat-option *ngFor="let address of addressTypes" [value]="address">
+            {{ address }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <patient-app-text-input
+        [label]="PHONE_LABEL"
+        [errorToMessageMap]="phoneErrorMessageMap"
+        [formControlName]="phoneControlName">
+      </patient-app-text-input>
+      <patient-app-text-input
+        [formControlName]="streetControlName"
+        [errorToMessageMap]="streetErrorMessageMap"
+        [label]="STREET_LABEL"
+      >
+      </patient-app-text-input>
+      <patient-app-text-input
+        [formControlName]="cityControlName"
+        [errorToMessageMap]="cityErrorMessageMap"
+        [label]="CITY_LABEL"
+      >
+      </patient-app-text-input>
+      <patient-app-text-input
+        [label]="ZIP_LABEL"
+        [errorToMessageMap]="zipcodeErrorMessageMap"
+        [formControlName]="zipControlName"
+      >
+      </patient-app-text-input>
+      <patient-app-text-input
+        [label]="COUNTRY_LABEL"
+        [errorToMessageMap]="countryErrorMessageMap"
+        [formControlName]="countryControlName"
+      >
+      </patient-app-text-input>
+    </div>
+  </div>
+
 </form>

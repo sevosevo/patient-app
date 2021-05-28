@@ -16,6 +16,14 @@
         "city": "Rome",
         "zipcode": "00131",
         "country": "Italy"
+      },
+      {
+        "type": "HOLIDAY PLACE",
+        "phone": "+39062231124",
+        "street": "Ulica 184",
+        "city": "Cacak",
+        "zipcode": "32000",
+        "country": "Serbia"
       }
     ]
   },

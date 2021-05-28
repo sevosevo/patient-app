@@ -2,7 +2,7 @@ import {Component, Inject, OnInit, ViewChild} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
 import {first, map, withLatestFrom} from 'rxjs/operators';
 
-import {AddPatientComponent, FacadePatientService} from '../../../../shared';
+import {AddPatientComponent, FacadePatientService, getFullName} from '../../../../shared';
 import {Observable, of} from 'rxjs';
 import {Doctor, Patient} from '../../../../shared/models';
 
@@ -37,7 +37,7 @@ export class ShowPatientComponent implements OnInit {
         map(([patient, doctors]) => {
           const patientCopy = { ...patient };
           const chosenDoctor = doctors.find(doctor => doctor.id === patient.doctor);
-          patientCopy.doctor = chosenDoctor.firstName + ' ' + chosenDoctor.lastName;
+          patientCopy.doctor = getFullName(chosenDoctor.firstName, chosenDoctor.lastName);
           return patientCopy;
         }),
       );
@@ -46,7 +46,9 @@ export class ShowPatientComponent implements OnInit {
   }
 
   disableAllFormFields() {
-    this.AddPatientFormComponent.patientFormGroup.disable();
+    setTimeout(() => {
+      this.AddPatientFormComponent.patientFormGroup.disable();
+    });
   }
 
   handleBackButtonClick() {
