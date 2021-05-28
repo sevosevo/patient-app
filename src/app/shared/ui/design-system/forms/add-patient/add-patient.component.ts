@@ -55,7 +55,7 @@ export class AddPatientComponent implements OnInit {
   patientFormGroup: FormGroup;
 
   ngOnInit() {
-    this.createPatientFormGroup(this.prefillForm);
+    this.createPatientFormGroup(this.prefillForm || {});
 
     this.toggleVatControlBasedOnAge();
     this.toggleNameControlBasedOnAddressType();
@@ -63,19 +63,24 @@ export class AddPatientComponent implements OnInit {
 
   createPatientFormGroup(prefillForm: Partial<Patient>) {
     this.patientFormGroup = new FormGroup({
-      [this.firstNameControlName]: new FormControl('', Validators.required),
-      [this.lastNameControlName]: new FormControl('', Validators.required),
-      [this.birthDateControlName]: new FormControl(null, Validators.required),
-      [this.emailControlName]: new FormControl('', [Validators.required, EmailValidator.isValidMailFormat]),
-      [this.VATCodeControlName]: new FormControl('', Validators.required),
-      [this.doctorControlName]: new FormControl('', [Validators.required, this.doctorExists.bind(this)]),
+      [this.firstNameControlName]: new FormControl(prefillForm ? prefillForm[this.firstNameControlName] : '', Validators.required),
+      [this.lastNameControlName]: new FormControl(prefillForm ? prefillForm[this.lastNameControlName] : '', Validators.required),
+      [this.birthDateControlName]: new FormControl(prefillForm ? prefillForm[this.birthDateControlName] : null, Validators.required),
+      [this.emailControlName]: new FormControl(prefillForm ? prefillForm[this.emailControlName] : '', [Validators.required, EmailValidator.isValidMailFormat]),
+      [this.VATCodeControlName]: new FormControl(prefillForm ? prefillForm[this.VATCodeControlName] : '', Validators.required),
+      [this.doctorControlName]: new FormControl(prefillForm ? prefillForm[this.doctorControlName] : '', [Validators.required, this.doctorExists.bind(this)]),
       [this.addressesControlName]: new FormArray([
-        this.createAddressFormGroup(true),
+        this.createAddressFormGroup(true,
+          prefillForm[this.addressesControlName] ?
+            prefillForm[this.addressesControlName].find(address => address.type === AddressType.HOME) :
+            null,
+        ),
       ]),
     });
 
     if (this.prefillForm) {
-      this.prefill(prefillForm);
+      this.createAndPrefillAddresses(prefillForm);
+      this.patientFormGroup.disable()
     }
   }
 
@@ -84,21 +89,21 @@ export class AddPatientComponent implements OnInit {
     return this.patientFormGroup.get(this.addressesControlName) as FormArray;
   }
 
-  createAddressFormGroup(firstAddressGroup: boolean) {
+  createAddressFormGroup(firstAddressGroup: boolean, prefillData?: Partial<Address>) {
     return new FormGroup({
-      [this.typeControlName]: new FormControl(firstAddressGroup ? AddressType.HOME : null, Validators.required),
-      [this.phoneControlName]: new FormControl('', [Validators.required, Validators.pattern(/^\+?[0-9\s]+$/)]),
-      [this.streetControlName]: new FormControl('', Validators.required),
-      [this.cityControlName]: new FormControl('', Validators.required),
-      [this.zipControlName]: new FormControl('', Validators.required),
-      [this.countryControlName]: new FormControl('', Validators.required),
-      [this.nameControlName]: new FormControl({value: '', disabled: true}, Validators.required),
+      [this.typeControlName]: new FormControl(firstAddressGroup ? AddressType.HOME : (prefillData[this.typeControlName] || null), Validators.required),
+      [this.phoneControlName]: new FormControl(prefillData ? prefillData[this.phoneControlName] : '', [Validators.required, Validators.pattern(/^\+?[0-9\s]+$/)]),
+      [this.streetControlName]: new FormControl(prefillData ? prefillData[this.streetControlName] : '', Validators.required),
+      [this.cityControlName]: new FormControl(prefillData ? prefillData[this.cityControlName] : '', Validators.required),
+      [this.zipControlName]: new FormControl(prefillData ? prefillData[this.zipControlName] : '', Validators.required),
+      [this.countryControlName]: new FormControl(prefillData ? prefillData[this.countryControlName] : '', Validators.required),
+      [this.nameControlName]: new FormControl({ value: prefillData ? prefillData[this.nameControlName] : '', disabled: true }, Validators.required),
     });
   }
 
   doctorExists(control: AbstractControl): ValidationErrors | null {
       const doctorExists = !!this.doctorOptions.find(doctor => doctor.name === control.value);
-      if (!doctorExists && control.value.length > 0) {
+      if (!doctorExists && (control.value && control.value.length > 0)) {
         return {
           'doctor-not-exist': true,
         };
@@ -107,7 +112,7 @@ export class AddPatientComponent implements OnInit {
   }
 
   addAddressForm() {
-    (this.patientFormGroup.get(this.addressesControlName) as FormArray).push(this.createAddressFormGroup(false));
+    (this.patientFormGroup.get(this.addressesControlName) as FormArray).push(this.createAddressFormGroup(false, {}));
     this.toggleNameControlBasedOnAddressType();
     this.patientFormGroup.updateValueAndValidity();
   }
@@ -155,48 +160,17 @@ export class AddPatientComponent implements OnInit {
     control.setValue('+39' + control.value);
   }
 
-  prefill(prefillForm: Partial<Patient>) {
-    this.patientFormGroup.get(this.firstNameControlName).setValue(prefillForm[this.firstNameControlName]);
-    this.patientFormGroup.get(this.lastNameControlName).setValue(prefillForm[this.lastNameControlName]);
-    this.patientFormGroup.get(this.emailControlName).setValue(prefillForm[this.emailControlName]);
-    this.patientFormGroup.get(this.birthDateControlName).setValue(prefillForm[this.birthDateControlName]);
-    this.patientFormGroup.get(this.VATCodeControlName).setValue(prefillForm[this.VATCodeControlName]);
-    this.patientFormGroup.get(this.doctorControlName).setValue(prefillForm.doctor);
-    // Prefill home address
-    this.prefillAddress(
-      (this.patientFormGroup.get(this.addressesControlName) as FormArray).controls[0] as FormGroup,
-      this.prefillForm.addresses.find(address => address.type === AddressType.HOME)
-    );
-
-    if (this.prefillForm.addresses.length > 1) {
-      this.createPrefillAddressForms();
+  createAndPrefillAddresses(prefillForm: Partial<Patient>) {
+    if (prefillForm[this.addressesControlName].length <= 1) {
+      return;
     }
-
-    setTimeout(() => this.patientFormGroup.disable());
+    this.createAndPrefillAddressForms(this.prefillForm);
   }
 
-  createPrefillAddressForms() {
-    this.prefillForm[this.addressesControlName].slice(1).forEach((address, idx) => {
-      (this.patientFormGroup.get(this.addressesControlName) as FormArray).push(this.createAddressFormGroup(false));
-      // Prefill form in next cycle
-      setTimeout(() => {
-        this.prefillAddress((this.patientFormGroup.get(this.addressesControlName) as FormArray).controls[idx + 1] as FormGroup, address);
-      });
+  createAndPrefillAddressForms(prefillForm: Partial<Patient>) {
+    prefillForm[this.addressesControlName].slice(1).forEach(prefillData => {
+      (this.patientFormGroup.get(this.addressesControlName) as FormArray).push(this.createAddressFormGroup(false, prefillData));
     });
-  }
-
-  prefillAddress(addressFormGroup: FormGroup, addressData: Address) {
-    addressFormGroup.get(this.phoneControlName).setValue(addressData[this.phoneControlName]);
-    addressFormGroup.get(this.zipControlName).setValue(addressData[this.zipControlName]);
-    addressFormGroup.get(this.streetControlName).setValue(addressData[this.streetControlName]);
-    addressFormGroup.get(this.cityControlName).setValue(addressData[this.cityControlName]);
-    addressFormGroup.get(this.countryControlName).setValue(addressData[this.countryControlName]);
-    if (addressData[this.typeControlName]) {
-      addressFormGroup.get(this.typeControlName).setValue(addressData[this.typeControlName]);
-    }
-    if (addressData[this.nameControlName]) {
-      addressFormGroup.get(this.nameControlName).setValue(addressData[this.nameControlName]);
-    }
   }
 
 }
