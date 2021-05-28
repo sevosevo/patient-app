@@ -4,6 +4,7 @@ import {EmailValidator} from '../../../../validators';
 import {AddressType, Patient} from '../../../../models';
 import {GetTimeUtility} from '../../../../utilities';
 import {TypeAheadInputOption} from '../../controls';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'patient-app-add-patient-form',
@@ -14,6 +15,8 @@ export class AddPatientComponent implements OnInit {
 
   @Input() prefillForm: Partial<Patient>;
   @Input() doctorOptions: TypeAheadInputOption[] = [];
+
+  addressTypeChangeSubscription: Subscription;
 
   addressTypes = Object.values(AddressType).filter(type => type !== AddressType.HOME);
 
@@ -28,6 +31,7 @@ export class AddPatientComponent implements OnInit {
   readonly COUNTRY_LABEL = 'Country';
   readonly CITY_LABEL = 'City';
   readonly STREET_LABEL = 'Street';
+  readonly NAME_LABEL = 'Name';
 
   readonly firstNameControlName = 'firstName';
   readonly lastNameControlName = 'lastName';
@@ -42,6 +46,7 @@ export class AddPatientComponent implements OnInit {
   readonly zipControlName = 'zipcode';
   readonly countryControlName = 'country';
   readonly typeControlName = 'type';
+  readonly nameControlName = 'name';
 
   readonly firstNameErrorMessageMap: Record<string, string> = {
     required: 'First name is required',
@@ -79,6 +84,9 @@ export class AddPatientComponent implements OnInit {
   readonly cityErrorMessageMap: Record<string, string> = {
     required: 'City is required',
   };
+  readonly nameErrorMessageMap: Record<string, string> = {
+    required: 'Name is required',
+  };
 
   patientFormGroup = new FormGroup({
     [this.firstNameControlName]: new FormControl('', Validators.required),
@@ -99,7 +107,8 @@ export class AddPatientComponent implements OnInit {
       [this.streetControlName]: new FormControl('', Validators.required),
       [this.cityControlName]: new FormControl('', Validators.required),
       [this.zipControlName]: new FormControl('', Validators.required),
-      [this.countryControlName]: new FormControl('', Validators.required)
+      [this.countryControlName]: new FormControl('', Validators.required),
+      [this.nameControlName]: new FormControl({value: '', disabled: true}, Validators.required),
     });
   }
 
@@ -115,6 +124,7 @@ export class AddPatientComponent implements OnInit {
 
   addAddressForm() {
     this.addressesControl.push(this.createAddressFormGroup(false));
+    this.toggleNameControlBasedOnAddressType();
     this.patientFormGroup.updateValueAndValidity();
   }
 
@@ -150,10 +160,26 @@ export class AddPatientComponent implements OnInit {
 
   ngOnInit() {
     this.toggleVatControlBasedOnAge();
+    this.toggleNameControlBasedOnAddressType();
 
     if (this.prefillForm) {
       this.prefill();
     }
+  }
+
+  toggleNameControlBasedOnAddressType() {
+    if (this.addressTypeChangeSubscription && !this.addressTypeChangeSubscription.closed) {
+      this.addressTypeChangeSubscription.unsubscribe();
+    }
+    this.addressesControl.controls.forEach(control => {
+      this.addressTypeChangeSubscription = control.get(this.typeControlName).valueChanges.subscribe(type => {
+        if (type === AddressType.WORK || type === AddressType.CLOSE_RELATIVE) {
+          control.get(this.nameControlName).enable();
+        } else {
+          control.get(this.nameControlName).disable();
+        }
+      });
+    });
   }
 
   toggleVatControlBasedOnAge() {
@@ -182,8 +208,8 @@ export class AddPatientComponent implements OnInit {
     this.birthDateControl.setValue(this.prefillForm.birthDate);
     this.VATControl.setValue(this.prefillForm.VATCode);
     this.doctorControl.setValue(this.prefillForm.doctor);
-    const homeAddress = this.prefillForm.addresses.find(address => address.type === AddressType.HOME);
-    this.prefillAddress(this.addressesControl.controls[0] as FormGroup, homeAddress);
+    // Prefill home address
+    this.prefillAddress(this.addressesControl.controls[0] as FormGroup, this.prefillForm.addresses.find(address => address.type === AddressType.HOME));
 
     if (this.prefillForm.addresses.length > 1) {
       this.createPrefillAddressForms();

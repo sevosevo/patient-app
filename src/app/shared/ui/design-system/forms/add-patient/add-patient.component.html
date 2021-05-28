@@ -43,10 +43,11 @@
 
   <button *ngIf="!prefillForm" (click)="addAddressForm();">Add new address</button>
 
-  <div [formArrayName]="addressesControlName" *ngFor="let item of addressesControl.controls; let i = index">
+  <div [formArrayName]="addressesControlName" *ngFor="let control of addressesControl.controls; let i = index">
     <button *ngIf="i > 0 && !prefillForm" (click)="removeAddressForm(i)">Remove address</button>
     <div [formGroupName]="i+''">
-      <div>{{ i === 0 ? 'Home address' : 'Other address'}}</div>
+      <div *ngIf="i === 0">{{ 'Home address:' }}</div>
+      <div *ngIf="i === 1">{{ 'Other addresses:' }}</div>
       <mat-form-field *ngIf="i > 0" appearance="fill">
         <mat-label>Type</mat-label>
         <mat-select [formControlName]="typeControlName">
@@ -60,6 +61,12 @@
         [label]="PHONE_LABEL"
         [errorToMessageMap]="phoneErrorMessageMap"
         [formControlName]="phoneControlName">
+      </patient-app-text-input>
+      <patient-app-text-input
+        *ngIf="control.get(nameControlName).enabled"
+        [label]="NAME_LABEL"
+        [errorToMessageMap]="nameErrorMessageMap"
+        [formControlName]="nameControlName">
       </patient-app-text-input>
       <patient-app-text-input
         [formControlName]="streetControlName"
