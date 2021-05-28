@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {FacadePatientService, LinkTableColumn, TableColumn, TableColumnType} from '../../../shared';
+import {FacadePatientService, getFullName, LinkTableColumn, TableColumn, TableColumnType} from '../../../shared';
 import {combineLatest, Subscription} from 'rxjs';
 import {Address, AddressType, Doctor, Patient} from '../../../shared/models';
 import {MatDialog} from '@angular/material';
@@ -85,7 +85,7 @@ export class PatientListComponent implements OnInit, OnDestroy {
     patientTableData.email = patient.email;
     patientTableData.homeAddress = this.getHomeAddressColumnData(patient);
     patientTableData.registeredDate = patient.registeredDate;
-    patientTableData.doctorName = doctor.firstName + ' ' + doctor.lastName;
+    patientTableData.doctorName = getFullName(doctor.firstName, doctor.lastName);
 
     return patientTableData as PatientTableData;
   }

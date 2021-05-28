@@ -1,7 +1,13 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import axios from 'axios';
 
-import {AddPatientComponent as AddPatientFormComponent, FacadePatientService, patientFactory, TypeAheadInputOption} from '../../../shared';
+import {
+  AddPatientComponent as AddPatientFormComponent,
+  FacadePatientService,
+  getFullName,
+  patientFactory,
+  TypeAheadInputOption
+} from '../../../shared';
 import {Doctor, Patient} from '../../../shared/models';
 import {Subscription} from 'rxjs';
 import {Router} from '@angular/router';
@@ -42,7 +48,7 @@ export class AddPatientComponent implements OnInit, OnDestroy {
   createDoctorOption(doctor: Doctor): { id: number, name: string } {
     return {
       id: doctor.id,
-      name: doctor.firstName + ' ' + doctor.lastName,
+      name: getFullName(doctor.firstName, doctor.lastName),
     };
   }
 
@@ -51,7 +57,7 @@ export class AddPatientComponent implements OnInit, OnDestroy {
     let chosenDoctor: Doctor = null;
     let newPatient: Patient = null;
     this.doctors$.subscribe(doctors => {
-      chosenDoctor = doctors.find(doctor => doctor.firstName + ' ' + doctor.lastName === formData.doctor);
+      chosenDoctor = doctors.find(doctor => getFullName(doctor.firstName, doctor.lastName) === formData.doctor);
     });
     this.facadePatientService.lastPatientId$.subscribe(lastId => {
       newPatient = patientFactory(
