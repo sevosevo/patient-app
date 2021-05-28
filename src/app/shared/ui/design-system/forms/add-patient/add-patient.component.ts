@@ -102,7 +102,7 @@ export class AddPatientComponent implements OnInit {
 
   createAddressFormGroup(firstAddressGroup: boolean) {
     return new FormGroup({
-      [this.typeControlName]: new FormControl(firstAddressGroup ? AddressType.HOME : '', Validators.required),
+      [this.typeControlName]: new FormControl(firstAddressGroup ? AddressType.HOME : null, Validators.required),
       [this.phoneControlName]: new FormControl('+39', [Validators.required, Validators.pattern(/^\+?[0-9\s]+$/)]),
       [this.streetControlName]: new FormControl('', Validators.required),
       [this.cityControlName]: new FormControl('', Validators.required),
@@ -232,9 +232,11 @@ export class AddPatientComponent implements OnInit {
     addressFormGroup.get(this.streetControlName).setValue(addressData[this.streetControlName]);
     addressFormGroup.get(this.cityControlName).setValue(addressData[this.cityControlName]);
     addressFormGroup.get(this.countryControlName).setValue(addressData[this.countryControlName]);
-
     if (addressData[this.typeControlName]) {
       addressFormGroup.get(this.typeControlName).setValue(addressData[this.typeControlName]);
+    }
+    if (addressData[this.nameControlName]) {
+      addressFormGroup.get(this.nameControlName).setValue(addressData[this.nameControlName]);
     }
   }
 

@@ -1,5 +1,4 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import axios from 'axios';
 
 import {
   AddPatientComponent as AddPatientFormComponent,
