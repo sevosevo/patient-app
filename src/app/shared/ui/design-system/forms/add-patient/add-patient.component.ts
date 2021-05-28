@@ -6,7 +6,7 @@ import {GetTimeUtility} from '../../../../utilities';
 import {TypeAheadInputOption} from '../../controls';
 import {Subscription} from 'rxjs';
 
-enum AddPatientLabels {
+enum AddPatientInputLabels {
   FIRST_NAME_LABEL = 'First Name',
   LAST_NAME_LABEL = 'Last Name',
   BIRTHDAY_LABEL = 'Birthday',
@@ -33,7 +33,7 @@ export class AddPatientComponent implements OnInit {
 
   addressTypeChangeSubscription: Subscription;
 
-  AddPatientLabels = AddPatientLabels;
+  AddPatientInputLabels = AddPatientInputLabels;
 
   addressTypes = Object.values(AddressType).filter(type => type !== AddressType.HOME);
 

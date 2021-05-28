@@ -8,7 +8,7 @@
         [errorToMessageMap]="{
           required: 'First name is required'
         }"
-        [label]="AddPatientLabels.FIRST_NAME_LABEL"
+        [label]="AddPatientInputLabels.FIRST_NAME_LABEL"
         [formControlName]="firstNameControlName">
       </patient-app-text-input>
       <br>
@@ -16,7 +16,7 @@
         [errorToMessageMap]="{
           required: 'Last name is required'
         }"
-        [label]="AddPatientLabels.LAST_NAME_LABEL"
+        [label]="AddPatientInputLabels.LAST_NAME_LABEL"
         [formControlName]="lastNameControlName">
       </patient-app-text-input>
       <br>
@@ -24,12 +24,12 @@
         [errorToMessageMap]="{
           required: 'Birthday is required'
         }"
-        [label]="AddPatientLabels.BIRTHDAY_LABEL"
+        [label]="AddPatientInputLabels.BIRTHDAY_LABEL"
         [formControlName]="birthDateControlName"
       ></patient-app-date-picker>
       <br>
       <patient-app-text-input
-        [label]="AddPatientLabels.VAT_CODE_LABEL"
+        [label]="AddPatientInputLabels.VAT_CODE_LABEL"
         [errorToMessageMap]="{
           required: 'VAT Code is required'
         }"
@@ -41,12 +41,12 @@
           required: 'Email is required',
           'email-not-valid': 'Email is not right format'
         }"
-        [label]="AddPatientLabels.EMAIL_LABEL"
+        [label]="AddPatientInputLabels.EMAIL_LABEL"
         [formControlName]="emailControlName">
       </patient-app-text-input>
       <br>
       <patient-app-type-ahead-input
-        [label]="AddPatientLabels.DOCTOR_LABEL"
+        [label]="AddPatientInputLabels.DOCTOR_LABEL"
         [errorToMessageMap]="{
           required: 'Please choose a doctor',
           'doctor-not-exist': 'Doctor with given name does not exist'
@@ -78,7 +78,7 @@
           <patient-app-text-input
             class="address-input-control"
             (blur)="addInternationalNumber(control.get(phoneControlName))"
-            [label]="AddPatientLabels.PHONE_LABEL"
+            [label]="AddPatientInputLabels.PHONE_LABEL"
             [errorToMessageMap]="{
               required: 'Phone is required',
               pattern: 'Phone is invalid'
@@ -89,7 +89,7 @@
           <patient-app-text-input
             class="address-input-control"
             *ngIf="control.get(nameControlName).enabled || (!!prefillForm && prefillForm.addresses[i].name)"
-            [label]="AddPatientLabels.NAME_LABEL"
+            [label]="AddPatientInputLabels.NAME_LABEL"
             [errorToMessageMap]="{
               required: 'Name is required'
             }"
@@ -101,7 +101,7 @@
             [errorToMessageMap]="{
               required: 'Street is required'
             }"
-            [label]="AddPatientLabels.STREET_LABEL"
+            [label]="AddPatientInputLabels.STREET_LABEL"
           >
           </patient-app-text-input>
           <patient-app-text-input
@@ -110,12 +110,12 @@
             [errorToMessageMap]="{
               required: 'City is required'
             }"
-            [label]="AddPatientLabels.CITY_LABEL"
+            [label]="AddPatientInputLabels.CITY_LABEL"
           >
           </patient-app-text-input>
           <patient-app-text-input
             class="address-input-control"
-            [label]="AddPatientLabels.ZIP_LABEL"
+            [label]="AddPatientInputLabels.ZIP_LABEL"
             [errorToMessageMap]="{
               required: 'Zipcode is required'
             }"
@@ -124,7 +124,7 @@
           </patient-app-text-input>
           <patient-app-text-input
             class="address-input-control"
-            [label]="AddPatientLabels.COUNTRY_LABEL"
+            [label]="AddPatientInputLabels.COUNTRY_LABEL"
             [errorToMessageMap]="{
               required: 'Country is required'
             }"
