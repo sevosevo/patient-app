@@ -1,6 +1,6 @@
 <mat-form-field>
   <mat-label>{{ label }}</mat-label>
-  <input [errorStateMatcher]="this" [formControl]="inputControl" matInput [placeholder]="placeholder">
+  <input (blur)="blur.next()" [errorStateMatcher]="this" [formControl]="inputControl" matInput [placeholder]="placeholder">
   <mat-error *ngIf="!ngControl.valid">
     <ng-container *ngFor="let error of errorToMessageMap | keyvalue">
         <ng-container

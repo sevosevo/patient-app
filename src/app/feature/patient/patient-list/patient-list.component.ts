@@ -128,5 +128,4 @@ export class PatientListComponent implements OnInit, OnDestroy {
   private getHomeAddress(patient: Patient): Address {
     return (patient.addresses || []).find(address => address.type === AddressType.HOME);
   }
-
 }

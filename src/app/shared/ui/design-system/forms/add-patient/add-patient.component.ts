@@ -6,6 +6,21 @@ import {GetTimeUtility} from '../../../../utilities';
 import {TypeAheadInputOption} from '../../controls';
 import {Subscription} from 'rxjs';
 
+enum AddPatientLabels {
+  FIRST_NAME_LABEL = 'First Name',
+  LAST_NAME_LABEL = 'Last Name',
+  BIRTHDAY_LABEL = 'Birthday',
+  VAT_CODE_LABEL = 'VATCode',
+  EMAIL_LABEL = 'Email',
+  DOCTOR_LABEL = 'Doctor',
+  PHONE_LABEL = 'Phone number',
+  ZIP_LABEL = 'Zip',
+  COUNTRY_LABEL = 'Country',
+  CITY_LABEL = 'City',
+  STREET_LABEL = 'Street',
+  NAME_LABEL = 'Name',
+}
+
 @Component({
   selector: 'patient-app-add-patient-form',
   templateUrl: './add-patient.component.html',
@@ -18,20 +33,9 @@ export class AddPatientComponent implements OnInit {
 
   addressTypeChangeSubscription: Subscription;
 
-  addressTypes = Object.values(AddressType).filter(type => type !== AddressType.HOME);
+  AddPatientLabels = AddPatientLabels;
 
-  readonly FIRST_NAME_LABEL = 'First Name';
-  readonly LAST_NAME_LABEL = 'Last Name';
-  readonly BIRTHDAY_LABEL = 'Birthday';
-  readonly VAT_CODE_LABEL = 'VATCode';
-  readonly EMAIL_LABEL = 'Email';
-  readonly DOCTOR_LABEL = 'Doctor';
-  readonly PHONE_LABEL = 'Phone number';
-  readonly ZIP_LABEL = 'Zip';
-  readonly COUNTRY_LABEL = 'Country';
-  readonly CITY_LABEL = 'City';
-  readonly STREET_LABEL = 'Street';
-  readonly NAME_LABEL = 'Name';
+  addressTypes = Object.values(AddressType).filter(type => type !== AddressType.HOME);
 
   readonly firstNameControlName = 'firstName';
   readonly lastNameControlName = 'lastName';
@@ -48,46 +52,6 @@ export class AddPatientComponent implements OnInit {
   readonly typeControlName = 'type';
   readonly nameControlName = 'name';
 
-  readonly firstNameErrorMessageMap: Record<string, string> = {
-    required: 'First name is required',
-  };
-  readonly lastNameErrorMessageMap: Record<string, string> = {
-    required: 'Last name is required',
-  };
-  readonly emailErrorMessageMap: Record<string, string> = {
-    required: 'Email is required',
-    'email-not-valid': 'Email is not right format',
-  };
-  readonly birthdayErrorMessageMap: Record<string, string> = {
-    required: 'Birthday is required',
-  };
-  readonly vatErrorMessageMap: Record<string, string> = {
-    required: 'VAT Code is required',
-  };
-  readonly doctorErrorMessageMap: Record<string, string> = {
-    required: 'Please choose a doctor',
-    'doctor-not-exist': 'Doctor with given name does not exist',
-  };
-  readonly phoneErrorMessageMap: Record<string, string> = {
-    required: 'Phone is required',
-    pattern: 'Phone is invalid',
-  };
-  readonly countryErrorMessageMap: Record<string, string> = {
-    required: 'Country is required',
-  };
-  readonly streetErrorMessageMap: Record<string, string> = {
-    required: 'Street is required',
-  };
-  readonly zipcodeErrorMessageMap: Record<string, string> = {
-    required: 'Zipcode is required',
-  };
-  readonly cityErrorMessageMap: Record<string, string> = {
-    required: 'City is required',
-  };
-  readonly nameErrorMessageMap: Record<string, string> = {
-    required: 'Name is required',
-  };
-
   patientFormGroup = new FormGroup({
     [this.firstNameControlName]: new FormControl('', Validators.required),
     [this.lastNameControlName]: new FormControl('', Validators.required),
@@ -100,10 +64,15 @@ export class AddPatientComponent implements OnInit {
     ]),
   });
 
+  // I left this getter in order to be able to cast this control to FormArray (so template doesn't throw an error)
+  get addressControl(): FormArray {
+    return this.patientFormGroup.get(this.addressesControlName) as FormArray;
+  }
+
   createAddressFormGroup(firstAddressGroup: boolean) {
     return new FormGroup({
       [this.typeControlName]: new FormControl(firstAddressGroup ? AddressType.HOME : null, Validators.required),
-      [this.phoneControlName]: new FormControl('+39', [Validators.required, Validators.pattern(/^\+?[0-9\s]+$/)]),
+      [this.phoneControlName]: new FormControl('', [Validators.required, Validators.pattern(/^\+?[0-9\s]+$/)]),
       [this.streetControlName]: new FormControl('', Validators.required),
       [this.cityControlName]: new FormControl('', Validators.required),
       [this.zipControlName]: new FormControl('', Validators.required),
@@ -123,37 +92,9 @@ export class AddPatientComponent implements OnInit {
   }
 
   addAddressForm() {
-    this.addressesControl.push(this.createAddressFormGroup(false));
+    (this.patientFormGroup.get(this.addressesControlName) as FormArray).push(this.createAddressFormGroup(false));
     this.toggleNameControlBasedOnAddressType();
     this.patientFormGroup.updateValueAndValidity();
-  }
-
-  get firstNameControl(): FormControl {
-    return this.patientFormGroup.get(this.firstNameControlName) as FormControl;
-  }
-
-  get lastNameControl(): FormControl {
-    return this.patientFormGroup.get(this.lastNameControlName) as FormControl;
-  }
-
-  get birthDateControl(): FormControl {
-    return this.patientFormGroup.get(this.birthDateControlName) as FormControl;
-  }
-
-  get emailControl(): FormControl {
-    return this.patientFormGroup.get(this.emailControlName) as FormControl;
-  }
-
-  get VATControl(): FormControl {
-    return this.patientFormGroup.get(this.VATCodeControlName) as FormControl;
-  }
-
-  get doctorControl(): FormControl {
-    return this.patientFormGroup.get(this.doctorControlName) as FormControl;
-  }
-
-  get addressesControl(): FormArray {
-    return this.patientFormGroup.get(this.addressesControlName) as FormArray;
   }
 
   constructor() { }
@@ -171,7 +112,7 @@ export class AddPatientComponent implements OnInit {
     if (this.addressTypeChangeSubscription && !this.addressTypeChangeSubscription.closed) {
       this.addressTypeChangeSubscription.unsubscribe();
     }
-    this.addressesControl.controls.forEach(control => {
+    (this.patientFormGroup.get(this.addressesControlName) as FormArray).controls.forEach(control => {
       this.addressTypeChangeSubscription = control.get(this.typeControlName).valueChanges.subscribe(type => {
         if (type === AddressType.WORK || type === AddressType.CLOSE_RELATIVE) {
           control.get(this.nameControlName).enable();
@@ -183,33 +124,43 @@ export class AddPatientComponent implements OnInit {
   }
 
   toggleVatControlBasedOnAge() {
-    this.birthDateControl.valueChanges.subscribe(date => {
+    this.patientFormGroup.get(this.birthDateControlName).valueChanges.subscribe(date => {
       if (!(date instanceof Date)) {
         return;
       }
       if (GetTimeUtility.calculateAge(date) > 18) {
-        this.VATControl.setValidators(Validators.required);
+        this.patientFormGroup.get(this.VATCodeControlName).setValidators(Validators.required);
       } else {
-        this.VATControl.clearValidators();
+        this.patientFormGroup.get(this.VATCodeControlName).clearValidators();
       }
-      this.VATControl.updateValueAndValidity();
+      this.patientFormGroup.get(this.VATCodeControlName).updateValueAndValidity();
     });
   }
 
   removeAddressForm(index: number) {
-    this.addressesControl.removeAt(index);
+    (this.patientFormGroup.get(this.addressesControlName) as FormArray).removeAt(index);
     this.patientFormGroup.updateValueAndValidity();
   }
 
+  addInternationalNumber(control: AbstractControl) {
+    if (control.value.length !== 0 && control.value.startsWith('+')) {
+      return;
+    }
+    control.setValue('+39' + control.value);
+  }
+
   prefill() {
-    this.firstNameControl.setValue(this.prefillForm.firstName);
-    this.lastNameControl.setValue(this.prefillForm.lastName);
-    this.emailControl.setValue(this.prefillForm.email);
-    this.birthDateControl.setValue(this.prefillForm.birthDate);
-    this.VATControl.setValue(this.prefillForm.VATCode);
-    this.doctorControl.setValue(this.prefillForm.doctor);
+    this.patientFormGroup.get(this.firstNameControlName).setValue(this.prefillForm[this.firstNameControlName]);
+    this.patientFormGroup.get(this.lastNameControlName).setValue(this.prefillForm[this.lastNameControlName]);
+    this.patientFormGroup.get(this.emailControlName).setValue(this.prefillForm[this.emailControlName]);
+    this.patientFormGroup.get(this.birthDateControlName).setValue(this.prefillForm[this.birthDateControlName]);
+    this.patientFormGroup.get(this.VATCodeControlName).setValue(this.prefillForm[this.VATCodeControlName]);
+    this.patientFormGroup.get(this.doctorControlName).setValue(this.prefillForm.doctor);
     // Prefill home address
-    this.prefillAddress(this.addressesControl.controls[0] as FormGroup, this.prefillForm.addresses.find(address => address.type === AddressType.HOME));
+    this.prefillAddress(
+      (this.patientFormGroup.get(this.addressesControlName) as FormArray).controls[0] as FormGroup,
+      this.prefillForm.addresses.find(address => address.type === AddressType.HOME)
+    );
 
     if (this.prefillForm.addresses.length > 1) {
       this.createPrefillAddressForms();
@@ -218,10 +169,10 @@ export class AddPatientComponent implements OnInit {
 
   createPrefillAddressForms() {
     this.prefillForm.addresses.slice(1).forEach((address, idx) => {
-      this.addressesControl.push(this.createAddressFormGroup(false));
+      (this.patientFormGroup.get(this.addressesControlName) as FormArray).push(this.createAddressFormGroup(false));
       // Prefill form in next cycle
       setTimeout(() => {
-        this.prefillAddress(this.addressesControl.controls[idx + 1] as FormGroup, address);
+        this.prefillAddress((this.patientFormGroup.get(this.addressesControlName) as FormArray).controls[idx + 1] as FormGroup, address);
       });
     });
   }

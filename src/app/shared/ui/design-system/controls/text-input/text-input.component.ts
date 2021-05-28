@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, Optional, Self} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Optional, Output, Self} from '@angular/core';
 import {
   ControlValueAccessor,
   FormControl,
@@ -20,6 +20,7 @@ export class TextInputComponent implements ControlValueAccessor, OnInit, ErrorSt
 
   @Input() removeSpaces: boolean;
 
+  @Output() blur = new EventEmitter();
 
   @Input()
   errorToMessageMap: Record<string, string> = {};
