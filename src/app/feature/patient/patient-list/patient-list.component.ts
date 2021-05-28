@@ -1,9 +1,8 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {FacadePatientService, getFullName, LinkTableColumn, TableColumn, TableColumnType} from '../../../shared';
+import {Component, OnDestroy, OnInit, TemplateRef, ViewChild} from '@angular/core';
+import {AddPatientComponent, FacadePatientService, getFullName, LinkTableColumn, TableColumn, TableColumnType} from '../../../shared';
 import {combineLatest, Subscription} from 'rxjs';
 import {Address, AddressType, Doctor, Patient} from '../../../shared/models';
-import {MatDialog} from '@angular/material';
-import {ShowPatientComponent} from './show-patient';
+import {MatDialog, MatDialogRef} from '@angular/material';
 
 interface PatientTableData {
   id: number;
@@ -22,10 +21,17 @@ interface PatientTableData {
   styleUrls: ['./patient-list.component.css']
 })
 export class PatientListComponent implements OnInit, OnDestroy {
+  @ViewChild('showPatientTemplate', { static: true }) showPatientTemplate: TemplateRef<PatientListComponent>;
+  @ViewChild(AddPatientComponent, { static: false }) AddPatientFormComponent: AddPatientComponent;
 
   readonly PAGE_SIZE = 4;
 
   readonly PATIENT_LIST_TABLE_TITLE = 'List of patients';
+  readonly SHOW_PATIENT_TITLE = 'Patient details';
+
+  dialogRef: MatDialogRef<PatientListComponent>;
+
+  patient: Patient;
 
   subscriptions: Subscription[] = [];
 
@@ -54,6 +60,10 @@ export class PatientListComponent implements OnInit, OnDestroy {
   ngOnInit() {
     const subscription = this.updateDataSource();
     this.subscriptions.push(subscription);
+  }
+
+  handleBackButtonClick() {
+    this.dialogRef.close();
   }
 
   ngOnDestroy() {
@@ -102,9 +112,17 @@ export class PatientListComponent implements OnInit, OnDestroy {
   }
 
   handleTableRowClicked(row: PatientTableData) {
-    this.dialog.open(ShowPatientComponent, { width: '600px', height: '600px', data: row.id })
-      .afterClosed()
-      .subscribe();
+    this.facadePatientService.patients$.subscribe(patients => this.patient = { ...patients.find(patient => patient.id === row.id) });
+    this.patient.doctor = row.doctorName;
+
+    this.dialogRef = this.dialog.open(this.showPatientTemplate, { width: '600px', height: '600px' });
+    this.disableAllFormFields();
+  }
+
+  disableAllFormFields() {
+    setTimeout(() => {
+      this.AddPatientFormComponent.patientFormGroup.disable();
+    });
   }
 
   private getHomeAddress(patient: Patient): Address {
