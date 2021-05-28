@@ -55,7 +55,7 @@ export class AddPatientComponent implements OnInit {
   patientFormGroup: FormGroup;
 
   ngOnInit() {
-    this.createPatientFormGroup(this.prefillForm || {});
+    this.createPatientFormGroup(this.prefillForm);
 
     this.toggleVatControlBasedOnAge();
     this.toggleNameControlBasedOnAddressType();
@@ -71,7 +71,7 @@ export class AddPatientComponent implements OnInit {
       [this.doctorControlName]: new FormControl(prefillForm ? prefillForm[this.doctorControlName] : '', [Validators.required, this.doctorExists.bind(this)]),
       [this.addressesControlName]: new FormArray([
         this.createAddressFormGroup(true,
-          prefillForm[this.addressesControlName] ?
+          prefillForm && prefillForm[this.addressesControlName] ?
             prefillForm[this.addressesControlName].find(address => address.type === AddressType.HOME) :
             null,
         ),
