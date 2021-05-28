@@ -51,7 +51,8 @@
         <div [formGroupName]="i+''">
           <div *ngIf="i === 0">{{ 'Home address:' }}</div>
           <div *ngIf="i === 1">{{ 'Other addresses:' }}</div>
-          <mat-form-field *ngIf="i > 0" appearance="fill">
+          <span style="margin-right: 5px;" *ngIf="i > 0">{{ i }})</span>
+          <mat-form-field class="address-input-control" *ngIf="i > 0" appearance="fill">
             <mat-label>Type</mat-label>
             <mat-select [formControlName]="typeControlName">
               <mat-option *ngFor="let address of addressTypes" [value]="address">
@@ -61,36 +62,42 @@
           </mat-form-field>
 
           <patient-app-text-input
+            class="address-input-control"
             [label]="PHONE_LABEL"
             [errorToMessageMap]="phoneErrorMessageMap"
             [removeSpaces]="true"
             [formControlName]="phoneControlName">
           </patient-app-text-input>
           <patient-app-text-input
+            class="address-input-control"
             *ngIf="control.get(nameControlName).enabled"
             [label]="NAME_LABEL"
             [errorToMessageMap]="nameErrorMessageMap"
             [formControlName]="nameControlName">
           </patient-app-text-input>
           <patient-app-text-input
+            class="address-input-control"
             [formControlName]="streetControlName"
             [errorToMessageMap]="streetErrorMessageMap"
             [label]="STREET_LABEL"
           >
           </patient-app-text-input>
           <patient-app-text-input
+            class="address-input-control"
             [formControlName]="cityControlName"
             [errorToMessageMap]="cityErrorMessageMap"
             [label]="CITY_LABEL"
           >
           </patient-app-text-input>
           <patient-app-text-input
+            class="address-input-control"
             [label]="ZIP_LABEL"
             [errorToMessageMap]="zipcodeErrorMessageMap"
             [formControlName]="zipControlName"
           >
           </patient-app-text-input>
           <patient-app-text-input
+            class="address-input-control"
             [label]="COUNTRY_LABEL"
             [errorToMessageMap]="countryErrorMessageMap"
             [formControlName]="countryControlName"

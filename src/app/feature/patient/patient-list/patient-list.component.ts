@@ -12,6 +12,7 @@ interface PatientTableData {
   registeredDate: Date | string;
   doctorName: string;
   homeAddress: string;
+  phone: string;
   email: string;
 }
 
@@ -36,6 +37,7 @@ export class PatientListComponent implements OnInit, OnDestroy {
     { label: 'Last name', type: TableColumnType.TEXT, field: 'lastName', visible: true, },
     { label: 'Registration date', type: TableColumnType.DATE, field: 'registeredDate', visible: true },
     { label: 'Doctor\'s name', type: TableColumnType.TEXT, field: 'doctorName', visible: true, },
+    { label: 'Phone', type: TableColumnType.TEXT, field: 'phone', visible: true },
     { label: 'Home address', type: TableColumnType.TEXT, field: 'homeAddress', visible: true, },
     { label: 'Email', type: TableColumnType.LINK, field: 'email', href: this.createMailToHref, visible: true } as LinkTableColumn,
   ];
@@ -86,6 +88,7 @@ export class PatientListComponent implements OnInit, OnDestroy {
     patientTableData.homeAddress = this.getHomeAddressColumnData(patient);
     patientTableData.registeredDate = patient.registeredDate;
     patientTableData.doctorName = getFullName(doctor.firstName, doctor.lastName);
+    patientTableData.phone = this.getHomeAddress(patient).phone;
 
     return patientTableData as PatientTableData;
   }
