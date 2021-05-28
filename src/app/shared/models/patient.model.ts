@@ -12,6 +12,7 @@ export interface Address {
   phoneNumber: string;
   street: string;
   city: string;
+  name?: string;
   country: string;
   zipcode: string;
   type: AddressType;

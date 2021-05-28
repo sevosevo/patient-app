@@ -70,7 +70,7 @@
           </patient-app-text-input>
           <patient-app-text-input
             class="address-input-control"
-            *ngIf="control.get(nameControlName).enabled || !!prefillForm"
+            *ngIf="control.get(nameControlName).enabled || (!!prefillForm && prefillForm.addresses[i].name)"
             [label]="NAME_LABEL"
             [errorToMessageMap]="nameErrorMessageMap"
             [formControlName]="nameControlName">
