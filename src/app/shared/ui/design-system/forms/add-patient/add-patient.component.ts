@@ -80,7 +80,7 @@ export class AddPatientComponent implements OnInit {
 
     if (this.prefillForm) {
       this.createAndPrefillAddresses(prefillForm);
-      this.patientFormGroup.disable()
+      this.patientFormGroup.disable();
     }
   }
 
